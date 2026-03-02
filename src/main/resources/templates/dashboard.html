@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Cinema</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🎬 Cinema App</h1>
+        <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
+    </div>
+
+    <h2>Ce doriți să faceți?</h2>
+
+    <div class="menu-grid">
+        <a th:href="@{/rezervare}" class="menu-card">
+            <span class="icon">🎟️</span>
+            <span>Rezervare nouă</span>
+        </a>
+        <a th:href="@{/afisareRezervari}" class="menu-card">
+            <span class="icon">📋</span>
+            <span>Afișare rezervări</span>
+        </a>
+        <a th:href="@{/verificareCapacitate}" class="menu-card">
+            <span class="icon">💺</span>
+            <span>Verificare capacitate</span>
+        </a>
+        <a th:href="@{/salveazaFisier}" class="menu-card">
+            <span class="icon">💾</span>
+            <span>Salvează în fișier</span>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

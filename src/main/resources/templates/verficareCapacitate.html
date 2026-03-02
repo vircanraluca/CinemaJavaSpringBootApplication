@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Capacitate - Cinema</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>💺 Verificare Capacitate</h1>
+        <a th:href="@{/dashboard}" class="btn btn-secondary">← Înapoi</a>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/verificareCapacitate}" method="post">
+            <div class="form-group">
+                <label>Selectează sala</label>
+                <select name="nrSala" required>
+                    <option value="">-- Selectează sala --</option>
+                    <option th:each="sala : ${sali}"
+                            th:value="${sala}"
+                            th:text="'Sala ' + ${sala}">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Verifică</button>
+        </form>
+    </div>
+
+    <!-- Rezultat -->
+    <div th:if="${locuriLibere != null}" class="card">
+        <h3>Sala <span th:text="${nrSala}"></span></h3>
+        <p>Locuri libere:
+            <strong th:text="${locuriLibere}"
+                    th:class="${locuriLibere == 0} ? 'text-danger' : 'text-success'">
+            </strong>
+            / 20
+        </p>
+        <div th:if="${locuriLibere == 0}" class="alert alert-error">
+            Sală plină!
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

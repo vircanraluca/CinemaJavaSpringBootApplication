@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezervări - Cinema</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📋 Afișare Rezervări</h1>
+        <a th:href="@{/dashboard}" class="btn btn-secondary">← Înapoi</a>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/afisareRezervari}" method="post">
+            <div class="form-group">
+                <label>Caută după nume</label>
+                <input type="text" name="nume" th:value="${nume}" placeholder="Introduceți numele" required/>
+            </div>
+            <button type="submit" class="btn btn-primary">Caută</button>
+        </form>
+    </div>
+
+    <!-- Rezultate -->
+    <div th:if="${rezervari != null}">
+
+        <div th:if="${#lists.isEmpty(rezervari)}" class="alert alert-error">
+            Nu există rezervări pentru <strong th:text="${nume}"></strong>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(rezervari)}">
+            <h3>Rezervări pentru <span th:text="${nume}"></span>:</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Film</th>
+                    <th>Sală</th>
+                    <th>Locuri</th>
+                    <th>Data</th>
+                    <th>Acțiuni</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="rez : ${rezervari}">
+                    <td th:text="${rez.id}"></td>
+                    <td th:text="${rez.film}"></td>
+                    <td th:text="'Sala ' + ${rez.nrSala}"></td>
+                    <td th:text="${rez.locuri}"></td>
+                    <td th:text="${rez.dataRezervare}"></td>
+                    <td>
+                        <form th:action="@{/stergeRezervare}" method="post"
+                              onsubmit="return confirm('Sigur doriți să ștergeți rezervarea?')">
+                            <input type="hidden" name="id" th:value="${rez.id}"/>
+                            <button type="submit" class="btn btn-danger">Șterge</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

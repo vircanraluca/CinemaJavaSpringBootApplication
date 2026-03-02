@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezervare - Cinema</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🎟️ Rezervare Nouă</h1>
+        <a th:href="@{/dashboard}" class="btn btn-secondary">← Înapoi</a>
+    </div>
+
+    <!-- Mesaj succes -->
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+
+    <!-- Mesaj eroare -->
+    <div th:if="${error}" class="alert alert-error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/rezervare}" th:object="${rezervare}" method="post">
+
+            <div class="form-group">
+                <label>Film</label>
+                <select th:field="*{film}" required>
+                    <option value="">-- Selectează filmul --</option>
+                    <option th:each="film : ${filme}"
+                            th:value="${film}"
+                            th:text="${film}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Sală</label>
+                <select th:field="*{nrSala}" required>
+                    <option value="">-- Selectează sala --</option>
+                    <option th:each="sala : ${sali}"
+                            th:value="${sala}"
+                            th:text="'Sala ' + ${sala}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Nume</label>
+                <input type="text" th:field="*{nume}" placeholder="Nume persoană" required/>
+            </div>
+
+            <div class="form-group">
+                <label>Număr locuri</label>
+                <input type="number" th:field="*{locuri}" min="1" max="20" required/>
+            </div>
+
+            <div class="form-group">
+                <label>Data rezervării</label>
+                <input type="date" th:field="*{dataRezervare}" required/>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Adaugă Rezervare</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
