@@ -15,13 +15,13 @@ public class Rezervare {
     private String film;
 
     @Column(name = "nr_sala", nullable = false)
-    private int nrSala;
+    private Integer nrSala;
 
     @Column(nullable = false)
     private String nume;
 
     @Column(nullable = false)
-    private int locuri;
+    private Integer locuri;
 
     @Column(name = "data_rezervare", nullable = false)
     private LocalDate dataRezervare;
@@ -30,7 +30,8 @@ public class Rezervare {
     public Rezervare() {}
 
     // Constructor cu parametri
-    public Rezervare(String film, int nrSala, String nume, int locuri, LocalDate dataRezervare) {
+
+    public Rezervare(String film, Integer nrSala, String nume, Integer locuri, LocalDate dataRezervare) {
         this.film = film;
         this.nrSala = nrSala;
         this.nume = nume;
@@ -38,19 +39,51 @@ public class Rezervare {
         this.dataRezervare = dataRezervare;
     }
 
-    // Getteri
-    public Long getId()                  { return id; }
-    public String getFilm()              { return film; }
-    public int getNrSala()               { return nrSala; }
-    public String getNume()              { return nume; }
-    public int getLocuri()               { return locuri; }
-    public LocalDate getDataRezervare()  { return dataRezervare; }
+    public Long getId() {
+        return id;
+    }
 
-    // Setteri
-    public void setId(Long id)                       { this.id = id; }
-    public void setFilm(String film)                 { this.film = film; }
-    public void setNrSala(int nrSala)                { this.nrSala = nrSala; }
-    public void setNume(String nume)                 { this.nume = nume; }
-    public void setLocuri(int locuri)                { this.locuri = locuri; }
-    public void setDataRezervare(LocalDate data)     { this.dataRezervare = data; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFilm() {
+        return film;
+    }
+
+    public void setFilm(String film) {
+        this.film = film;
+    }
+
+    public Integer getNrSala() {
+        return nrSala;
+    }
+
+    public void setNrSala(Integer nrSala) {
+        this.nrSala = nrSala;
+    }
+
+    public String getNume() {
+        return nume;
+    }
+
+    public void setNume(String nume) {
+        this.nume = nume;
+    }
+
+    public Integer getLocuri() {
+        return locuri;
+    }
+
+    public void setLocuri(Integer locuri) {
+        this.locuri = locuri;
+    }
+
+    public LocalDate getDataRezervare() {
+        return dataRezervare;
+    }
+
+    public void setDataRezervare(LocalDate dataRezervare) {
+        this.dataRezervare = dataRezervare;
+    }
 }

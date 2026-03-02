@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cinema App</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+</head>
+<body>
+
+<!-- SECTION 1 - HERO -->
+<div class="section1">
+    <div class="apply">
+        <h2>All the latest movies, series and shows</h2>
+        <h3>Join our passionate community of movie enthusiasts and contribute
+            to a growing collection of reviews and recommendations.</h3>
+        <div class="button-container">
+            <a th:href="@{/login}"><button class="btn-large">Explore Movies</button></a>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 4 - POPULAR MOVIES -->
+<div class="section4">
+    <div class="movies">
+        <h1><span class="bigletter">T</span>he most popular movies</h1>
+        <p>Stream the successes, including the latest from DC and Warner Bros.</p>
+        <p>The comedies, dramas, and the classics you love.</p>
+    </div>
+    <div class="movieexamples">
+        <img src="https://assets-prd.ignimgs.com/2022/10/14/darkknightcanned-1665789495277.jpg?width=300&crop=1%3A1%2Csmart&auto=webp" alt="Dark Knight">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqvQgtMCguH6CR6sBy_nVfKoLBGvpFEuMBIyC78npfWw&s" alt="Movie">
+        <img src="https://i1.sndcdn.com/artworks-0qJytq5kreMppHy7-N4Ex1g-t500x500.jpg" alt="Movie">
+        <img src="https://i1.sndcdn.com/artworks-gE2k66khMJ7h-0-t500x500.jpg" alt="Movie">
+        <img src="https://i1.sndcdn.com/artworks-jrzglYWBvs5zAizM-LQszyQ-t500x500.jpg" alt="Movie">
+    </div>
+</div>
+
+<!-- SECTION 3 - UPCOMING MOVIES -->
+<div class="section3">
+    <div class="movies">
+        <h1><span class="bigletter">U</span>pcoming Movies</h1>
+        <p>Be the first to watch the most anticipated movies of the year.</p>
+        <p>Stay updated with the latest trailers and release dates.</p>
+    </div>
+    <div class="movieexamples">
+        <img src="https://m.media-amazon.com/images/I/81p+xe8cbnL._AC_SY679_.jpg" alt="The Batman">
+        <img src="https://m.media-amazon.com/images/I/71niXI3lxlL._AC_SY679_.jpg" alt="Interstellar">
+        <img src="https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg" alt="Inception">
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Gladiator_II_%282024%29_poster.jpg" alt="Gladiator">
+        <img src="https://upload.wikimedia.org/wikipedia/en/4/48/Nosferatu_IMAX_poster_2024.jpg" alt="Nosferatu">
+    </div>
+</div>
+
+<!-- SECTION 5 - TRENDING NOW -->
+<div class="section5">
+    <div class="movies">
+        <h1><span class="bigletter">T</span>rending Now</h1>
+        <p>See what's hot right now in the world of movies and series.</p>
+        <p>The most talked-about and watched movies today.</p>
+    </div>
+    <div class="movieexamples">
+        <img src="https://upload.wikimedia.org/wikipedia/en/1/11/Pushpa_2-_The_Rule.jpg" alt="Pushpa 2">
+        <img src="https://upload.wikimedia.org/wikipedia/en/7/73/Moana_2_poster.jpg" alt="Moana 2">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/a3/Venom_The_Last_Dance_Poster.jpg" alt="Venom">
+        <img src="https://upload.wikimedia.org/wikipedia/en/2/25/Red_One_poster.jpg" alt="Red One">
+        <img src="https://upload.wikimedia.org/wikipedia/en/f/f7/Inside_Out_2_poster.jpg" alt="Inside Out 2">
+    </div>
+</div>
+
+<!-- SECTION 2 - MOVIE NEWS -->
+<div class="section2">
+    <div>
+        <h1><span class="bigletter">M</span>ovie news</h1>
+    </div>
+    <div class="imgs">
+        <img src="https://m.media-amazon.com/images/M/MV5BNTEzMzBiNGYtYThiZS00MzBjLTk5ZWItM2FmMzU3Y2RjYTVlXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_FMjpg_UX1000_.jpg" alt="News 1"/>
+        <img src="https://pyxis.nymag.com/v1/imgs/e7c/1ce/29ba7ab00372a87239627261f7ba8acc70-17-true-detective.2x.h473.w710.jpg" alt="News 2"/>
+        <img src="https://ew.com/thmb/Jua28XPVRQyx3FOJh1BH46TOBuc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/true-detective-s1_1-2000-b73d8c089ab64387b2ae805dd4168dde.jpg" alt="News 3"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCeJOO-9FXPGvMalP96svQOvvjwBjplyIs0g&usqp=CAU" alt="News 4"/>
+    </div>
+</div>
+
+</body>
+</html>
