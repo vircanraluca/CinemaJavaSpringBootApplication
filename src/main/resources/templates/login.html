@@ -6,15 +6,19 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
 <div class="container">
     <div class="card">
         <h1>🎬 Cinema App</h1>
         <h2>Autentificare</h2>
 
-        <!-- Mesaj eroare -->
-        <div th:if="${error}" class="alert alert-error">
-            <span th:text="${error}"></span>
+        <!-- Eroare la login -->
+        <div th:if="${param.error}" class="alert alert-error">
+            Username sau parolă greșită!
+        </div>
+
+        <!-- Logout reușit -->
+        <div th:if="${param.logout}" class="alert alert-success">
+            Te-ai deconectat cu succes!
         </div>
 
         <form th:action="@{/login}" method="post">
@@ -30,6 +34,5 @@
         </form>
     </div>
 </div>
-
 </body>
 </html>

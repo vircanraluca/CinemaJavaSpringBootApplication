@@ -1,4 +1,4 @@
-package security;
+package com.example.CinemaJavaSpringBootApplication.security;
 
 import com.example.CinemaJavaSpringBootApplication.model.User;
 import com.example.CinemaJavaSpringBootApplication.repository.UserRepository;
