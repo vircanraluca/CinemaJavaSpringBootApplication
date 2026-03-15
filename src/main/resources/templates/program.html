@@ -30,20 +30,15 @@
     <div class="filters-card">
         <form th:action="@{/program}" method="get" class="filters-form">
             <div class="filter-group">
-                <label>🎬 Film</label>
-                <select name="film">
-                    <option value="">Toate filmele</option>
-                    <option th:each="f : ${filme}"
-                            th:value="${f}"
-                            th:text="${f}"
-                            th:selected="${f == filmSelectat}">
+                <label>🎭 Gen</label>
+                <select name="gen">
+                    <option value="">Toate genurile</option>
+                    <option th:each="g : ${genuri}"
+                            th:value="${g}"
+                            th:text="${g}"
+                            th:selected="${g == genSelectat}">
                     </option>
                 </select>
-            </div>
-            <div class="filter-group">
-                <label>📆 Data</label>
-                <input type="date" name="data"
-                       th:value="${dataSelectata}"/>
             </div>
             <div class="filter-actions">
                 <button type="submit" class="btn-filter">🔍 Filtrează</button>
@@ -52,31 +47,33 @@
         </form>
     </div>
 
-    <!-- REZULTATE -->
-    <div th:if="${rezervari.empty}" class="empty-state">
+    <!-- FILME -->
+    <div th:if="${filme.empty}" class="empty-state">
         <span>🎭</span>
-        <p>Nu există rezervări pentru filtrele selectate.</p>
+        <p>Nu există filme pentru genul selectat.</p>
     </div>
 
-    <div th:if="${!rezervari.empty}" class="program-grid">
-        <div th:each="r : ${rezervari}" class="program-card">
+    <div th:if="${!filme.empty}" class="program-grid">
+        <div th:each="film : ${filme}" class="program-card">
+            <div class="card-poster">
+                <img th:src="${film.imagine}" th:alt="${film.titlu}"
+                     onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'"/>
+            </div>
             <div class="card-header">
-                <span class="film-title" th:text="${r.film}"></span>
-                <span class="sala-badge" th:text="'Sala ' + ${r.nrSala}"></span>
+                <span class="film-title" th:text="${film.titlu}"></span>
+                <span class="gen-badge" th:text="${film.gen}"></span>
             </div>
             <div class="card-body">
                 <div class="card-row">
-                    <span class="label">👤 Nume</span>
-                    <span th:text="${r.nume}"></span>
+                    <span class="label">⏱️ Durată</span>
+                    <span th:text="${film.durata} + ' min'"></span>
                 </div>
                 <div class="card-row">
-                    <span class="label">💺 Locuri</span>
-                    <span th:text="${r.locuri}"></span>
+                    <span class="label">📅 An</span>
+                    <span th:text="${film.an}"></span>
                 </div>
-                <div class="card-row">
-                    <span class="label">📅 Data</span>
-                    <span th:text="${r.dataRezervare}"></span>
-                </div>
+                <div class="card-desc" th:text="${film.descriere}"></div>
+                <a th:href="@{/rezervare}" class="btn-rezerva">🎟️ Rezervă</a>
             </div>
         </div>
     </div>

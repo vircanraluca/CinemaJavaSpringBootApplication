@@ -1,6 +1,8 @@
 package com.example.CinemaJavaSpringBootApplication.controller;
 
+import com.example.CinemaJavaSpringBootApplication.model.Movie;
 import com.example.CinemaJavaSpringBootApplication.model.Rezervare;
+import com.example.CinemaJavaSpringBootApplication.repository.MovieRepository;
 import com.example.CinemaJavaSpringBootApplication.repository.RezervareRepository;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -11,48 +13,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProgramController {
 
     private final RezervareRepository rezervareRepository;
+    private final MovieRepository movieRepository;
 
-    public ProgramController(RezervareRepository rezervareRepository) {
+    public ProgramController(RezervareRepository rezervareRepository,
+                             MovieRepository movieRepository) {
         this.rezervareRepository = rezervareRepository;
+        this.movieRepository = movieRepository;
     }
 
     @GetMapping("/program")
     public String showProgram(
-            @RequestParam(required = false) String film,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+            @RequestParam(required = false) String gen,
             Model model) {
 
-        List<Rezervare> rezervari;
+        List<Movie> filme;
 
-        if (film != null && !film.isEmpty() && data != null) {
-            rezervari = rezervareRepository.findByFilmAndDataRezervare(film, data);
-        } else if (film != null && !film.isEmpty()) {
-            rezervari = rezervareRepository.findByFilm(film);
-        } else if (data != null) {
-            rezervari = rezervareRepository.findByDataRezervare(data);
+        if (gen != null && !gen.isEmpty()) {
+            filme = movieRepository.findByGen(gen);
         } else {
-            rezervari = rezervareRepository.findAll();
+            filme = movieRepository.findAll();
         }
 
-        model.addAttribute("rezervari", rezervari);
-        model.addAttribute("filme", getFilme());
-        model.addAttribute("filmSelectat", film);
-        model.addAttribute("dataSelectata", data);
-        return "program";
-    }
+        List<String> genuri = movieRepository.findAll()
+                .stream()
+                .map(Movie::getGen)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
 
-    private List<String> getFilme() {
-        return Arrays.asList(
-                "Top Gun: Maverick",
-                "Ratatouille",
-                "Inception",
-                "Avatar",
-                "Interstellar"
-        );
+        model.addAttribute("filme", filme);
+        model.addAttribute("genuri", genuri);
+        model.addAttribute("genSelectat", gen);
+        return "program";
     }
 }

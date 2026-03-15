@@ -1,6 +1,8 @@
 package com.example.CinemaJavaSpringBootApplication.controller;
 
+import com.example.CinemaJavaSpringBootApplication.model.Movie;
 import com.example.CinemaJavaSpringBootApplication.model.Rezervare;
+import com.example.CinemaJavaSpringBootApplication.repository.MovieRepository;
 import com.example.CinemaJavaSpringBootApplication.service.RezervareService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -9,14 +11,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Controller
 public class RezervareController {
 
     private final RezervareService rezervareService;
+    private final MovieRepository movieRepository;
 
-    public RezervareController(RezervareService rezervareService) {
+    public RezervareController(RezervareService rezervareService,
+                               MovieRepository movieRepository) {
         this.rezervareService = rezervareService;
+        this.movieRepository = movieRepository;
     }
 
     // ===================== DASHBOARD =====================
@@ -93,13 +99,10 @@ public class RezervareController {
 
     // ===================== HELPER METHODS =====================
     private List<String> getFilme() {
-        return Arrays.asList(
-                "Top Gun: Maverick",
-                "Ratatouille",
-                "Inception",
-                "Avatar",
-                "Interstellar"
-        );
+        return movieRepository.findAll()
+                .stream()
+                .map(Movie::getTitlu)
+                .collect(Collectors.toList());
     }
 
     private List<Integer> getSali() {

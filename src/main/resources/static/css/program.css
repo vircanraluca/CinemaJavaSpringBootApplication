@@ -182,6 +182,58 @@ body {
     align-items: center;
 }
 
+/* POSTER */
+.card-poster {
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+}
+
+.card-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.program-card:hover .card-poster img {
+    transform: scale(1.05);
+}
+
+/* GEN BADGE */
+.gen-badge {
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* DESCRIERE */
+.card-desc {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+/* BUTON REZERVA */
+.btn-rezerva {
+    display: block;
+    text-align: center;
+    background: #e50914;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-rezerva:hover { background: #c40812; }
+
 .film-title {
     font-weight: 700;
     font-size: 1rem;
