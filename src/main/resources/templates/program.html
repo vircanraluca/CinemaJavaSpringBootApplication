@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ro">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Program Cinema</title>
+    <link rel="stylesheet" th:href="@{/css/program.css}"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+    <div class="navbar-links">
+        <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
+        <a th:href="@{/program}" class="active">📅 Program</a>
+        <a th:href="@{/afisareRezervari}">📋 Rezervările mele</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+        <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+    </div>
+</nav>
+
+<div class="page-container">
+
+    <h1 class="page-title">📅 Program Cinema</h1>
+
+    <!-- FILTRE -->
+    <div class="filters-card">
+        <form th:action="@{/program}" method="get" class="filters-form">
+            <div class="filter-group">
+                <label>🎬 Film</label>
+                <select name="film">
+                    <option value="">Toate filmele</option>
+                    <option th:each="f : ${filme}"
+                            th:value="${f}"
+                            th:text="${f}"
+                            th:selected="${f == filmSelectat}">
+                    </option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>📆 Data</label>
+                <input type="date" name="data"
+                       th:value="${dataSelectata}"/>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter">🔍 Filtrează</button>
+                <a th:href="@{/program}" class="btn-reset">✕ Resetează</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- REZULTATE -->
+    <div th:if="${rezervari.empty}" class="empty-state">
+        <span>🎭</span>
+        <p>Nu există rezervări pentru filtrele selectate.</p>
+    </div>
+
+    <div th:if="${!rezervari.empty}" class="program-grid">
+        <div th:each="r : ${rezervari}" class="program-card">
+            <div class="card-header">
+                <span class="film-title" th:text="${r.film}"></span>
+                <span class="sala-badge" th:text="'Sala ' + ${r.nrSala}"></span>
+            </div>
+            <div class="card-body">
+                <div class="card-row">
+                    <span class="label">👤 Nume</span>
+                    <span th:text="${r.nume}"></span>
+                </div>
+                <div class="card-row">
+                    <span class="label">💺 Locuri</span>
+                    <span th:text="${r.locuri}"></span>
+                </div>
+                <div class="card-row">
+                    <span class="label">📅 Data</span>
+                    <span th:text="${r.dataRezervare}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

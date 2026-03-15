@@ -13,6 +13,7 @@
 <nav class="navbar" sec:authorize="isAuthenticated()">
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
+        <a th:href="@{/program}">📅 Program</a>
         <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
         <a th:href="@{/afisareRezervari}">📋 Rezervările mele</a>
         <a th:href="@{/verificareCapacitate}">💺 Verificare capacitate</a>
