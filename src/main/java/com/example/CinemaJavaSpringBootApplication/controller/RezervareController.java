@@ -47,15 +47,25 @@ public class RezervareController {
                                   Model model) {
         try {
             rezervareService.adaugaRezervare(rezervare);
-            model.addAttribute("success", "Rezervare adăugată cu succes!");
+            return "redirect:/confirmare?film=" + rezervare.getFilm()
+                    + "&data=" + rezervare.getDataRezervare();
         } catch (IllegalArgumentException | IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("rezervare", new Rezervare());
+            model.addAttribute("filme", getFilme());
+            model.addAttribute("sali", getSali());
+            return "rezervare";
         }
+    }
 
-        model.addAttribute("rezervare", new Rezervare());
-        model.addAttribute("filme", getFilme());
-        model.addAttribute("sali", getSali());
-        return "rezervare";
+    @GetMapping("/confirmare")
+    public String showConfirmare(
+            @RequestParam String film,
+            @RequestParam String data,
+            Model model) {
+        model.addAttribute("film", film);
+        model.addAttribute("data", data);
+        return "confirmare";
     }
 
     // ===================== AFISARE REZERVARI =====================

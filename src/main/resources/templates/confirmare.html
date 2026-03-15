@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ro">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rezervare Confirmată</title>
+  <link rel="stylesheet" th:href="@{/css/seats.css}"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+  <div class="navbar-links">
+    <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
+    <a th:href="@{/program}">📅 Program</a>
+    <a th:href="@{/afisareRezervari}">📋 Rezervările mele</a>
+    <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+    <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+  </div>
+</nav>
+
+<div class="page-container">
+  <div class="confirmare-card">
+
+    <div class="check-icon">✅</div>
+
+    <h1>Rezervare Confirmată!</h1>
+    <p class="subtitle">Îți mulțumim pentru rezervare. Te așteptăm la cinema!</p>
+
+    <div class="confirmare-details">
+      <div class="detail-row">
+        <span class="detail-label">🎬 Film</span>
+        <span class="detail-value" th:text="${film}"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">📅 Data</span>
+        <span class="detail-value" th:text="${data}"></span>
+      </div>
+    </div>
+
+    <div class="confirmare-actions">
+      <a th:href="@{/program}" class="btn-action">📅 Înapoi la Program</a>
+      <a th:href="@{/afisareRezervari}" class="btn-action btn-secondary">📋 Rezervările mele</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
