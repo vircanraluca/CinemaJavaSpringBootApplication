@@ -15,6 +15,11 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @GetMapping("/")
+    public String home() {
+        return "home";  // afișează home.html direct
+    }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";
@@ -45,8 +50,4 @@ public class AuthController {
         return "register";
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "redirect:/login";
-    }
 }

@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Rute publice
-                        .requestMatchers("/login", "/register", "/").permitAll()
+                        .requestMatchers("/","/login", "/register", "/").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         // Doar ADMIN
