@@ -73,7 +73,8 @@
                     <span th:text="${film.an}"></span>
                 </div>
                 <div class="card-desc" th:text="${film.descriere}"></div>
-                <a th:href="@{/rezervare}" class="btn-rezerva">🎟️ Rezervă</a>
+                <a th:href="@{/seats(film=${film.titlu}, nrSala=1, dataRezervare=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')})}"
+                   class="btn-rezerva">🎟️ Rezervă</a>
             </div>
         </div>
     </div>

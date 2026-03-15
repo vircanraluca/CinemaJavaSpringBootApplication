@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ro">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Selectare Locuri</title>
+    <link rel="stylesheet" th:href="@{/css/seats.css}"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+    <div class="navbar-links">
+        <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
+        <a th:href="@{/program}">📅 Program</a>
+        <a th:href="@{/afisareRezervari}">📋 Rezervările mele</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+        <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+    </div>
+</nav>
+
+<div class="page-container">
+
+    <div class="movie-info">
+        <h1 th:text="${film}">Nume Film</h1>
+        <p>Sala <strong th:text="${nrSala}">1</strong>
+            &nbsp;|&nbsp;
+            <span th:text="${dataRezervare}">2024-01-01</span>
+        </p>
+    </div>
+
+    <!-- ECRAN -->
+    <div class="screen-wrapper">
+        <div class="screen">ECRAN</div>
+        <div class="screen-shadow"></div>
+    </div>
+
+    <!-- SALA -->
+    <div class="cinema-hall">
+        <div th:each="rand, rowStat : ${randuri}"
+             th:class="'row row-' + ${rowStat.index}"
+             class="seat-row">
+            <span class="row-label" th:text="${rand.litera}">A</span>
+            <div class="seats">
+                <div th:each="seat : ${rand.locuri}"
+                     th:class="'seat ' + (${seat.ocupat} ? 'occupied' : 'available')"
+                     th:attr="data-seat=${rand.litera + seat.numar}"
+                     th:text="${seat.numar}">
+                </div>
+            </div>
+            <span class="row-label" th:text="${rand.litera}">A</span>
+        </div>
+    </div>
+
+    <!-- LEGENDA -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="seat available"></div>
+            <span>Liber</span>
+        </div>
+        <div class="legend-item">
+            <div class="seat occupied"></div>
+            <span>Ocupat</span>
+        </div>
+        <div class="legend-item">
+            <div class="seat selected"></div>
+            <span>Selectat</span>
+        </div>
+    </div>
+
+    <!-- FORMULAR CONFIRMARE -->
+    <div class="confirm-panel" id="confirmPanel">
+        <form th:action="@{/rezervare}" method="post">
+            <input type="hidden" name="film" th:value="${film}"/>
+            <input type="hidden" name="nrSala" th:value="${nrSala}"/>
+            <input type="hidden" name="dataRezervare" th:value="${dataRezervare}"/>
+            <input type="hidden" name="locuri" id="locuriInput" value="1"/>
+
+            <div class="confirm-info">
+                <span>🎬 <strong th:text="${film}"></strong></span>
+                <span>💺 Loc selectat: <strong id="selectedSeatLabel">-</strong></span>
+                <span>📅 <strong th:text="${dataRezervare}"></strong></span>
+            </div>
+
+            <div class="confirm-name">
+                <label>👤 Numele tău</label>
+                <input type="text" name="nume" placeholder="ex: Ion Popescu" required/>
+            </div>
+
+            <button type="submit" class="btn-confirm">✅ Confirmă Rezervarea</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    document.querySelectorAll('.seat.available').forEach(seat => {
+        seat.addEventListener('click', function () {
+            // Deselectează orice alt loc
+            document.querySelectorAll('.seat.selected').forEach(s => {
+                s.classList.remove('selected');
+                s.classList.add('available');
+            });
+
+            // Selectează locul curent
+            this.classList.remove('available');
+            this.classList.add('selected');
+
+            // Actualizează panoul de confirmare
+            const seatId = this.getAttribute('data-seat');
+            document.getElementById('selectedSeatLabel').textContent = seatId;
+            document.getElementById('confirmPanel').classList.add('visible');
+        });
+    });
+</script>
+
+</body>
+</html>
