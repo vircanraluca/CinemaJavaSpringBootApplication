@@ -85,6 +85,10 @@ body { font-family: Arial, sans-serif; }
   object-fit: cover;
 }
 
+body{
+    padding-top:65px;
+}
+
 .section2 h1 { margin-bottom: 1.5rem; font-size: clamp(1.5rem, 3vw, 2rem); }
 
 /* MEDIA QUERIES */
@@ -99,4 +103,69 @@ body { font-family: Arial, sans-serif; }
 
 @media screen and (max-width: 500px) {
   .movieexamples, .imgs { grid-template-columns: 1fr; }
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 65px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.navbar-brand span {
+    color: #e50914;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.navbar-links a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.navbar-links a.logout {
+    background: #e50914;
+    color: #fff;
+    font-weight: 600;
+}
+
+.navbar-links a.logout:hover {
+    background: #c40812;
+}
+
+body {
+    padding-top: 65px;
 }

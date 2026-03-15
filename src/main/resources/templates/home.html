@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,7 +9,26 @@
     <link rel="stylesheet" th:href="@{/css/home.css}"/>
 </head>
 <body>
+<!-- NAVBAR -->
+<nav class="navbar" sec:authorize="isAuthenticated()">
+    <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+    <div class="navbar-links">
+        <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
+        <a th:href="@{/afisareRezervari}">📋 Rezervările mele</a>
+        <a th:href="@{/verificareCapacitate}">💺 Verificare capacitate</a>
+        <a th:href="@{/salveazaFisier}">💾 Salvează fișier</a>
+        <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+    </div>
+</nav>
 
+<!-- Buton login - doar pentru vizitatori neautentificați -->
+<div class="navbar" sec:authorize="!isAuthenticated()">
+    <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+    <div class="navbar-links">
+        <a th:href="@{/login}">🔐 Login</a>
+        <a th:href="@{/register}">📝 Register</a>
+    </div>
+</div>
 <!-- SECTION 1 - HERO -->
 <div class="section1">
     <div class="apply">
@@ -15,7 +36,12 @@
         <h3>Join our passionate community of movie enthusiasts and contribute
             to a growing collection of reviews and recommendations.</h3>
         <div class="button-container">
-            <a th:href="@{/login}"><button class="btn-large">Explore Movies</button></a>
+            <a th:href="@{/rezervare}" sec:authorize="isAuthenticated()">
+                <button class="btn-large">Rezervă acum</button>
+            </a>
+            <a th:href="@{/login}" sec:authorize="!isAuthenticated()">
+                <button class="btn-large">Explore Movies</button>
+            </a>
         </div>
     </div>
 </div>

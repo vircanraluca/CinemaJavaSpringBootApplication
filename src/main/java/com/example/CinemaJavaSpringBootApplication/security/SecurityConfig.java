@@ -21,7 +21,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Rute publice
                         .requestMatchers("/","/login", "/register", "/").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         // Doar ADMIN
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -29,9 +29,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")           // pagina ta custom
-                        .loginProcessingUrl("/login")  // form action="/login"
-                        .defaultSuccessUrl("/dashboard", true)
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)  // ← schimbă din /dashboard în /
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
