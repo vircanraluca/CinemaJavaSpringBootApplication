@@ -441,6 +441,7 @@ body {
 .sala-selector {
     display: flex;
     align-items: center;
+    justify-content: center; /* asta o centrează */
     gap: 12px;
     margin-top: 0.8rem;
     flex-wrap: wrap;
