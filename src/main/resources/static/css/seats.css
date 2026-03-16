@@ -471,6 +471,14 @@ body {
     font-size: 0.85rem;
     font-weight: 600;
 }
+
+input[readonly] {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    font-weight: 600;
+    cursor: not-allowed;
+}
 /* RESPONSIVE */
 @media (max-width: 600px) {
     .confirm-row {

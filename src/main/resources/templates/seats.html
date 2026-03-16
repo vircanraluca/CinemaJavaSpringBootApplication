@@ -105,6 +105,12 @@
 
                 <div class="confirm-row">
                     <div class="field-group">
+                        <label><span class="field-icon">🏛️</span>Sală selectată</label>
+                        <input type="text" id="salaDisplay" readonly
+                               placeholder="Selectează sala mai sus"/>
+                    </div>
+
+                    <div class="field-group">
                         <label><span class="field-icon">📅</span>Data rezervării</label>
                         <input type="date" name="dataRezervare" required/>
                     </div>
@@ -120,67 +126,72 @@
 </div>
 
 <script>
-    const filmParam = /*[[${film}]]*/ '';
-
     function adaugaEventListeners() {
-        document.querySelectorAll('.seat.available').forEach(seat => {
-            seat.removeEventListener('click', seatClickHandler);
-            seat.addEventListener('click', seatClickHandler);
-        });
-    }
+     document.querySelectorAll('.seat.available').forEach(seat => {
+         seat.removeEventListener('click', seatClickHandler);
+         seat.addEventListener('click', seatClickHandler);
+     });
+ }
 
-    function seatClickHandler() {
-        const nrSala = document.getElementById('salaSelect').value;
-        if (!nrSala) {
-            alert('Te rugăm să selectezi o sală mai întâi!');
-            return;
-        }
+ function seatClickHandler() {
+     const nrSala = document.getElementById('salaSelect').value;
+     if (!nrSala) {
+         alert('Te rugăm să selectezi o sală mai întâi!');
+         return;
+     }
 
-        document.querySelectorAll('.seat.selected').forEach(s => {
-            s.classList.remove('selected');
-            s.classList.add('available');
-        });
+     document.querySelectorAll('.seat.selected').forEach(s => {
+         s.classList.remove('selected');
+         s.classList.add('available');
+     });
 
-        this.classList.remove('available');
-        this.classList.add('selected');
+     this.classList.remove('available');
+     this.classList.add('selected');
 
-        const seatId = this.getAttribute('data-seat');
-        document.getElementById('selectedSeatLabel').textContent = seatId;
-        document.getElementById('nrSalaHidden').value = nrSala;
-        document.getElementById('confirmPanel').classList.add('visible');
-    }
+     const seatId = this.getAttribute('data-seat');
+     const salaText = document.getElementById('salaSelect').options[
+         document.getElementById('salaSelect').selectedIndex
+     ].text;
 
-    // Când se schimbă sala — reîncarcă locurile ocupate
-    document.getElementById('salaSelect').addEventListener('change', function() {
-        const nrSala = this.value;
-        if (!nrSala) return;
+     document.getElementById('selectedSeatLabel').textContent = seatId;
+     document.getElementById('nrSalaHidden').value = nrSala;
+     document.getElementById('salaDisplay').value = salaText;
+     document.getElementById('confirmPanel').classList.add('visible');
+ }
 
-        fetch(`/seats/ocupate?nrSala=${nrSala}`)
-            .then(res => res.json())
-            .then(data => {
-                const locuriOcupate = data.locuriOcupate;
-                const seats = document.querySelectorAll('.cinema-hall .seat');
+ document.getElementById('salaSelect').addEventListener('change', function() {
+     const nrSala = this.value;
+     if (!nrSala) return;
 
-                seats.forEach((seat, index) => {
-                    seat.classList.remove('occupied', 'available', 'selected');
-                    if (index < locuriOcupate) {
-                        seat.classList.add('occupied');
-                    } else {
-                        seat.classList.add('available');
-                    }
-                });
+     const salaText = this.options[this.selectedIndex].text; // ← definit corect aici
 
-                document.getElementById('salaInfo').textContent =
-                    `${20 - locuriOcupate} locuri libere`;
-                document.getElementById('selectedSeatLabel').textContent = '-';
-                document.getElementById('confirmPanel').classList.remove('visible');
-                document.getElementById('nrSalaHidden').value = '';
+     fetch(`/seats/ocupate?nrSala=${nrSala}`)
+         .then(res => res.json())
+         .then(data => {
+             const locuriOcupate = data.locuriOcupate;
+             const seats = document.querySelectorAll('.cinema-hall .seat');
 
-                adaugaEventListeners();
-            });
-    });
+             seats.forEach((seat, index) => {
+                 seat.classList.remove('occupied', 'available', 'selected');
+                 if (index < locuriOcupate) {
+                     seat.classList.add('occupied');
+                 } else {
+                     seat.classList.add('available');
+                 }
+             });
 
-    adaugaEventListeners();
+             document.getElementById('salaInfo').textContent =
+                 `${20 - locuriOcupate} locuri libere`;
+             document.getElementById('selectedSeatLabel').textContent = '-';
+             document.getElementById('salaDisplay').value = salaText;
+             document.getElementById('confirmPanel').classList.remove('visible');
+             document.getElementById('nrSalaHidden').value = '';
+
+             adaugaEventListeners();
+         });
+ });
+
+ adaugaEventListeners();
 </script>
 
 </body>
