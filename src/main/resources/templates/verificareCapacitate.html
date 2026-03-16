@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Capacitate - Cinema</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
+
+<nav class="navbar">
+    <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+    <div class="navbar-links">
+        <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
+        <a th:href="@{/program}">📅 Program</a>
+        <a th:href="@{/afisareRezervari}">📋 Rezervările mele</a>
+        <a th:href="@{/verificareCapacitate}" class="active">💺 Capacitate</a>
+        <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+    </div>
+</nav>
 
 <div class="container">
     <div class="header">
         <h1>💺 Verificare Capacitate</h1>
-        <a th:href="@{/dashboard}" class="btn btn-secondary">← Înapoi</a>
+        <a th:href="@{/}" class="btn btn-secondary">← Înapoi</a>
     </div>
 
     <div class="card">
