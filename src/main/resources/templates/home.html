@@ -36,7 +36,7 @@
         <h3>Join our passionate community of movie enthusiasts and contribute
             to a growing collection of reviews and recommendations.</h3>
         <div class="button-container">
-            <a th:href="@{/rezervare}" sec:authorize="isAuthenticated()">
+            <a th:href="@{/program}" sec:authorize="isAuthenticated()">
                 <button class="btn-large">Make reservation now</button>
             </a>
             <a th:href="@{/login}" sec:authorize="!isAuthenticated()">

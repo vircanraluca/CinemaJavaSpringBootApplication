@@ -26,15 +26,13 @@ public class ProgramController {
     @GetMapping("/program")
     public String showProgram(
             @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String title,
             Model model) {
 
-        List<Movie> movies;
+        String genreTrimmed = (genre != null && !genre.isBlank()) ? genre : null;
+        String titleTrimmed = (title != null && !title.isBlank()) ? title : null;
 
-        if (genre != null && !genre.isEmpty()) {
-            movies = movieRepository.findByGenre(genre);
-        } else {
-            movies = movieRepository.findAll();
-        }
+        List<Movie> movies = movieRepository.findByFilters(titleTrimmed, genreTrimmed);
 
         List<String> genres = movieRepository.findAll()
                 .stream()
@@ -46,6 +44,7 @@ public class ProgramController {
         model.addAttribute("movies", movies);
         model.addAttribute("genres", genres);
         model.addAttribute("selectedGenre", genre);
+        model.addAttribute("selectedTitle", title);
         return "program";
     }
 }

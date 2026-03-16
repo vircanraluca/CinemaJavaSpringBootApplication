@@ -28,6 +28,10 @@
     <div class="filters-card">
         <form th:action="@{/program}" method="get" class="filters-form">
             <div class="filter-group">
+                <label>🔤 Title</label>
+                <input type="text" name="title" th:value="${selectedTitle}" placeholder="Search by title"/>
+            </div>
+            <div class="filter-group">
                 <label>🎭 Genre</label>
                 <select name="genre">
                     <option value="">All genres</option>
