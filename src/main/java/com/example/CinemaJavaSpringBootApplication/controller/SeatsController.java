@@ -23,19 +23,12 @@ public class SeatsController {
     @GetMapping("/seats")
     public String showSeats(
             @RequestParam String film,
-            @RequestParam Integer nrSala,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataRezervare,
             Model model) {
 
-        // Locuri ocupate în sala și ziua respectivă
-        int locuriOcupate = rezervareRepository.getLocuriOcupate(nrSala);
-
-        // Generează rândurile sălii (5 rânduri x 8 locuri = 40 locuri)
-        List<Rand> randuri = genereazaRanduri(locuriOcupate);
+        // Generează sala goală - scaunele ocupate se vor actualiza după ce userul alege sala
+        List<Rand> randuri = genereazaRanduri(0);
 
         model.addAttribute("film", film);
-        model.addAttribute("nrSala", nrSala);
-        model.addAttribute("dataRezervare", dataRezervare);
         model.addAttribute("randuri", randuri);
         return "seats";
     }
