@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Salvează Fișier - Cinema</title>
+  <title>Save File - Cinema</title>
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
   <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
@@ -11,17 +11,17 @@
 <nav class="navbar">
   <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
   <div class="navbar-links">
-    <a th:href="@{/program}">📅 Program</a>
-    <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
-    <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
-    <a th:href="@{/salveazaFisier}">💾 Save files</a>
+    <a th:href="@{/program}">📅 Schedule</a>
+    <a th:href="@{/reservations}" class="active">📋 Reservations</a>
+    <a th:href="@{/hallCapacity}">💺 Capacity</a>
+    <a th:href="@{/saveFile}">💾 Save File</a>
     <a th:href="@{/logout}" class="logout">⏻ Logout</a>
   </div>
 </nav>
 
 <div class="container">
   <div class="header">
-    <h1>💾 Save the file </h1>
+    <h1>💾 Save File</h1>
     <a th:href="@{/}" class="btn btn-secondary">← Back</a>
   </div>
 
@@ -29,7 +29,7 @@
     <div class="alert alert-success">
       <span th:text="${success}"></span>
     </div>
-    <p>Fișierul <strong>rezervari.txt</strong> a fost salvat în directorul proiectului.</p>
+    <p>The file <strong>reservations.txt</strong> has been saved in the project directory.</p>
   </div>
 
   <div th:if="${error}" class="alert alert-error">

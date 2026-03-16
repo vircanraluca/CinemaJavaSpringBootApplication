@@ -1,14 +1,12 @@
 package com.example.CinemaJavaSpringBootApplication.controller;
 
-import com.example.CinemaJavaSpringBootApplication.repository.RezervareRepository;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,75 +15,74 @@ import java.util.Map;
 @Controller
 public class SeatsController {
 
-    private final RezervareRepository rezervareRepository;
+    private final ReservationRepository reservationRepository;
 
-    public SeatsController(RezervareRepository rezervareRepository) {
-        this.rezervareRepository = rezervareRepository;
+    public SeatsController(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
     }
 
     @GetMapping("/seats")
     public String showSeats(
-            @RequestParam String film,
-            @RequestParam Integer nrSala,
+            @RequestParam String movie,
+            @RequestParam Integer hallNumber,
             @RequestParam(required = false) String error,
             Model model) {
 
-        int locuriOcupate = rezervareRepository.getLocuriOcupate(nrSala);
-        List<Rand> randuri = genereazaRanduri(locuriOcupate);
+        int occupiedSeats = reservationRepository.getOccupiedSeats(hallNumber);
+        List<Row> rows = generateRows(occupiedSeats);
 
-        model.addAttribute("film", film);
-        model.addAttribute("nrSala", nrSala);
-        model.addAttribute("randuri", randuri);
+        model.addAttribute("movie", movie);
+        model.addAttribute("hallNumber", hallNumber);
+        model.addAttribute("rows", rows);
         model.addAttribute("error", error);
         return "seats";
     }
 
-    @GetMapping("/seats/ocupate")
+    @GetMapping("/seats/occupied")
     @ResponseBody
-    public Map<String, Object> getLocuriOcupate(@RequestParam Integer nrSala) {
-        int ocupate = rezervareRepository.getLocuriOcupate(nrSala);
+    public Map<String, Object> getOccupiedSeats(@RequestParam Integer hallNumber) {
+        int occupied = reservationRepository.getOccupiedSeats(hallNumber);
         Map<String, Object> result = new HashMap<>();
-        result.put("locuriOcupate", ocupate);
+        result.put("occupiedSeats", occupied);
         return result;
     }
 
-    private List<Rand> genereazaRanduri(int locuriOcupate) {
-        String[] litere = {"A", "B", "C", "D", "E"};
-        int locuriPerRand = 8;
-        List<Rand> randuri = new ArrayList<>();
-        int contor = 0;
+    private List<Row> generateRows(int occupiedSeats) {
+        String[] letters = {"A", "B", "C", "D", "E"};
+        int seatsPerRow = 8;
+        List<Row> rows = new ArrayList<>();
+        int counter = 0;
 
-        for (String litera : litere) {
-            Rand rand = new Rand(litera);
-            for (int i = 1; i <= locuriPerRand; i++) {
-                contor++;
-                rand.adaugaLoc(new Loc(i, contor <= locuriOcupate));
+        for (String letter : letters) {
+            Row row = new Row(letter);
+            for (int i = 1; i <= seatsPerRow; i++) {
+                counter++;
+                row.addSeat(new Seat(i, counter <= occupiedSeats));
             }
-            randuri.add(rand);
+            rows.add(row);
         }
-        return randuri;
+        return rows;
     }
 
-    // Clase interne pentru structura sălii
-    public static class Rand {
-        private String litera;
-        private List<Loc> locuri = new ArrayList<>();
+    public static class Row {
+        private String letter;
+        private List<Seat> seats = new ArrayList<>();
 
-        public Rand(String litera) { this.litera = litera; }
-        public void adaugaLoc(Loc loc) { locuri.add(loc); }
-        public String getLitera() { return litera; }
-        public List<Loc> getLocuri() { return locuri; }
+        public Row(String letter) { this.letter = letter; }
+        public void addSeat(Seat seat) { seats.add(seat); }
+        public String getLetter() { return letter; }
+        public List<Seat> getSeats() { return seats; }
     }
 
-    public static class Loc {
-        private int numar;
-        private boolean ocupat;
+    public static class Seat {
+        private int number;
+        private boolean occupied;
 
-        public Loc(int numar, boolean ocupat) {
-            this.numar = numar;
-            this.ocupat = ocupat;
+        public Seat(int number, boolean occupied) {
+            this.number = number;
+            this.occupied = occupied;
         }
-        public int getNumar() { return numar; }
-        public boolean isOcupat() { return ocupat; }
+        public int getNumber() { return number; }
+        public boolean isOccupied() { return occupied; }
     }
 }

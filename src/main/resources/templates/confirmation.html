@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ro">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirmed reservations</title>
+  <title>Reservation Confirmed</title>
   <link rel="stylesheet" th:href="@{/css/seats.css}"/>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
   <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
   <div class="navbar-links">
-    <a th:href="@{/program}">📅 Program</a>
-    <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
-    <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
-    <a th:href="@{/salveazaFisier}">💾 Save files</a>
+    <a th:href="@{/program}">📅 Schedule</a>
+    <a th:href="@{/reservations}" class="active">📋 Reservations</a>
+    <a th:href="@{/hallCapacity}">💺 Capacity</a>
+    <a th:href="@{/saveFile}">💾 Save File</a>
     <a th:href="@{/logout}" class="logout">⏻ Logout</a>
   </div>
 </nav>
@@ -25,23 +24,23 @@
 
     <div class="check-icon">✅</div>
 
-    <h1>Rezervare Confirmată!</h1>
+    <h1>Reservation Confirmed!</h1>
     <p class="subtitle">Thank you for your reservation!</p>
 
     <div class="confirmare-details">
       <div class="detail-row">
         <span class="detail-label">🎬 Movie</span>
-        <span class="detail-value" th:text="${film}"></span>
+        <span class="detail-value" th:text="${movie}"></span>
       </div>
       <div class="detail-row">
-        <span class="detail-label">📅 Data</span>
-        <span class="detail-value" th:text="${data}"></span>
+        <span class="detail-label">📅 Date</span>
+        <span class="detail-value" th:text="${date}"></span>
       </div>
     </div>
 
     <div class="confirmare-actions">
-      <a th:href="@{/program}" class="btn-action">📅 Back to the Program Page</a>
-      <a th:href="@{/afisareRezervari}" class="btn-action btn-secondary">📋 Reservations </a>
+      <a th:href="@{/program}" class="btn-action">📅 Back to Schedule</a>
+      <a th:href="@{/reservations}" class="btn-action btn-secondary">📋 Reservations</a>
     </div>
 
   </div>

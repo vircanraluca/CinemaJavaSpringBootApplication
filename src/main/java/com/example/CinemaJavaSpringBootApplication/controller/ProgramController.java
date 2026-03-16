@@ -1,55 +1,51 @@
 package com.example.CinemaJavaSpringBootApplication.controller;
 
 import com.example.CinemaJavaSpringBootApplication.model.Movie;
-import com.example.CinemaJavaSpringBootApplication.model.Rezervare;
 import com.example.CinemaJavaSpringBootApplication.repository.MovieRepository;
-import com.example.CinemaJavaSpringBootApplication.repository.RezervareRepository;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 public class ProgramController {
 
-    private final RezervareRepository rezervareRepository;
+    private final ReservationRepository reservationRepository;
     private final MovieRepository movieRepository;
 
-    public ProgramController(RezervareRepository rezervareRepository,
+    public ProgramController(ReservationRepository reservationRepository,
                              MovieRepository movieRepository) {
-        this.rezervareRepository = rezervareRepository;
+        this.reservationRepository = reservationRepository;
         this.movieRepository = movieRepository;
     }
 
     @GetMapping("/program")
     public String showProgram(
-            @RequestParam(required = false) String gen,
+            @RequestParam(required = false) String genre,
             Model model) {
 
-        List<Movie> filme;
+        List<Movie> movies;
 
-        if (gen != null && !gen.isEmpty()) {
-            filme = movieRepository.findByGen(gen);
+        if (genre != null && !genre.isEmpty()) {
+            movies = movieRepository.findByGenre(genre);
         } else {
-            filme = movieRepository.findAll();
+            movies = movieRepository.findAll();
         }
 
-        List<String> genuri = movieRepository.findAll()
+        List<String> genres = movieRepository.findAll()
                 .stream()
-                .map(Movie::getGen)
+                .map(Movie::getGenre)
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
 
-        model.addAttribute("filme", filme);
-        model.addAttribute("genuri", genuri);
-        model.addAttribute("genSelectat", gen);
+        model.addAttribute("movies", movies);
+        model.addAttribute("genres", genres);
+        model.addAttribute("selectedGenre", genre);
         return "program";
     }
 }

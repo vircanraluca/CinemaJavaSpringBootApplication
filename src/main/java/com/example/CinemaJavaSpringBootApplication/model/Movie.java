@@ -1,6 +1,5 @@
 package com.example.CinemaJavaSpringBootApplication.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -12,49 +11,52 @@ public class Movie {
     private Long id;
 
     @Column(nullable = false)
-    private String titlu;
+    private String title;
 
     @Column(length = 1000)
-    private String descriere;
+    private String description;
 
-    private String imagine; // URL imagine
+    @Column(name = "image_url")
+    private String image;
 
-    private Integer durata; // minute
+    @Column(name = "duration_minutes")
+    private Integer duration;
 
-    private String gen; // Action, Comedy, etc.
+    @Column(name = "genre_type")
+    private String genre;
 
-    private Integer an;
+    @Column(name = "release_year")
+    private Integer year;
 
     public Movie() {}
 
-    public Movie(String titlu, String descriere, String imagine, Integer durata, String gen, Integer an) {
-        this.titlu = titlu;
-        this.descriere = descriere;
-        this.imagine = imagine;
-        this.durata = durata;
-        this.gen = gen;
-        this.an = an;
+    public Movie(String title, String description, String image, Integer duration, String genre, Integer year) {
+        this.title = title;
+        this.description = description;
+        this.image = image;
+        this.duration = duration;
+        this.genre = genre;
+        this.year = year;
     }
 
-    // Getteri și Setteri
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getTitlu() { return titlu; }
-    public void setTitlu(String titlu) { this.titlu = titlu; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getDescriere() { return descriere; }
-    public void setDescriere(String descriere) { this.descriere = descriere; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getImagine() { return imagine; }
-    public void setImagine(String imagine) { this.imagine = imagine; }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 
-    public Integer getDurata() { return durata; }
-    public void setDurata(Integer durata) { this.durata = durata; }
+    public Integer getDuration() { return duration; }
+    public void setDuration(Integer duration) { this.duration = duration; }
 
-    public String getGen() { return gen; }
-    public void setGen(String gen) { this.gen = gen; }
+    public String getGenre() { return genre; }
+    public void setGenre(String genre) { this.genre = genre; }
 
-    public Integer getAn() { return an; }
-    public void setAn(Integer an) { this.an = an; }
+    public Integer getYear() { return year; }
+    public void setYear(Integer year) { this.year = year; }
 }

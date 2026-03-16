@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Rezervări - Cinema</title>
+    <title>Reservations - Cinema</title>
     <link rel="stylesheet" th:href="@{/css/home.css}"/>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
@@ -10,9 +10,9 @@
 <nav class="navbar">
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
-        <a th:href="@{/program}">📅 Program</a>
-        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
-        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
+        <a th:href="@{/program}">📅 Schedule</a>
+        <a th:href="@{/reservations}" class="active">📋 Reservations</a>
+        <a th:href="@{/hallCapacity}">💺 Capacity</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
@@ -23,24 +23,23 @@
     </div>
 
     <div class="card">
-        <form th:action="@{/afisareRezervari}" method="post">
+        <form th:action="@{/reservations}" method="post">
             <div class="form-group">
                 <label>Search by name</label>
-                <input type="text" name="nume" th:value="${nume}" placeholder="Insert the name" required/>
+                <input type="text" name="name" th:value="${name}" placeholder="Insert the name" required/>
             </div>
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
     </div>
 
-    <!-- Rezultate -->
-    <div th:if="${rezervari != null}">
+    <div th:if="${reservations != null}">
 
-        <div th:if="${#lists.isEmpty(rezervari)}" class="alert alert-error">
-            Reservation are not available for <strong th:text="${nume}"></strong>
+        <div th:if="${#lists.isEmpty(reservations)}" class="alert alert-error">
+            No reservations found for <strong th:text="${name}"></strong>
         </div>
 
-        <div th:if="${!#lists.isEmpty(rezervari)}">
-            <h3>Reservation for  <span th:text="${nume}"></span>:</h3>
+        <div th:if="${!#lists.isEmpty(reservations)}">
+            <h3>Reservations for <span th:text="${name}"></span>:</h3>
             <table>
                 <thead>
                 <tr>
@@ -53,16 +52,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="rez : ${rezervari}">
-                    <td th:text="${rez.id}"></td>
-                    <td th:text="${rez.film}"></td>
-                    <td th:text="'Sala ' + ${rez.nrSala}"></td>
-                    <td th:text="${rez.locuri}"></td>
-                    <td th:text="${rez.dataRezervare}"></td>
+                <tr th:each="reservation : ${reservations}">
+                    <td th:text="${reservation.id}"></td>
+                    <td th:text="${reservation.movie}"></td>
+                    <td th:text="'Hall ' + ${reservation.hallNumber}"></td>
+                    <td th:text="${reservation.seats}"></td>
+                    <td th:text="${reservation.reservationDate}"></td>
                     <td>
-                        <form th:action="@{/stergeRezervare}" method="post"
-                              onsubmit="return confirm('Sigur doriți să ștergeți rezervarea?')">
-                            <input type="hidden" name="id" th:value="${rez.id}"/>
+                        <form th:action="@{/deleteReservation}" method="post"
+                              onsubmit="return confirm('Are you sure you want to delete this reservation?')">
+                            <input type="hidden" name="id" th:value="${reservation.id}"/>
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>

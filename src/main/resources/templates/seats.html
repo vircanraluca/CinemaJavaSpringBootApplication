@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ro">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Selectare Locuri</title>
+    <title>Seat Selection</title>
     <link rel="stylesheet" th:href="@{/css/seats.css}"/>
 </head>
 <body>
 
-<!-- POPUP EROARE -->
 <div id="errorPopup" th:if="${error}" class="error-popup">
     <div class="error-popup-content">
         <span class="error-icon">⚠️</span>
@@ -18,13 +17,12 @@
     </div>
 </div>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
-        <a th:href="@{/program}">📅 Program</a>
-        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
-        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
+        <a th:href="@{/program}">📅 Schedule</a>
+        <a th:href="@{/reservations}" class="active">📋 Reservations</a>
+        <a th:href="@{/hallCapacity}">💺 Capacity</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
@@ -32,7 +30,7 @@
 <div class="page-container">
 
     <div class="movie-info">
-        <h1 th:text="${film}">Movie name</h1>
+        <h1 th:text="${movie}">Movie name</h1>
         <div class="sala-selector">
             <label>🏛️ Select hall:</label>
             <select id="salaSelect">
@@ -51,30 +49,27 @@
         </div>
     </div>
 
-    <!-- ECRAN -->
     <div class="screen-wrapper">
         <div class="screen">SCREEN</div>
         <div class="screen-shadow"></div>
     </div>
 
-    <!-- SALA -->
     <div class="cinema-hall">
-        <div th:each="rand, rowStat : ${randuri}"
+        <div th:each="row, rowStat : ${rows}"
              th:class="'row row-' + ${rowStat.index}"
              class="seat-row">
-            <span class="row-label" th:text="${rand.litera}">A</span>
+            <span class="row-label" th:text="${row.letter}">A</span>
             <div class="seats">
-                <div th:each="seat : ${rand.locuri}"
-                     th:class="'seat ' + (${seat.ocupat} ? 'occupied' : 'available')"
-                     th:attr="data-seat=${rand.litera + seat.numar}"
-                     th:text="${seat.numar}">
+                <div th:each="seat : ${row.seats}"
+                     th:class="'seat ' + (${seat.occupied} ? 'occupied' : 'available')"
+                     th:attr="data-seat=${row.letter + seat.number}"
+                     th:text="${seat.number}">
                 </div>
             </div>
-            <span class="row-label" th:text="${rand.litera}">A</span>
+            <span class="row-label" th:text="${row.letter}">A</span>
         </div>
     </div>
 
-    <!-- LEGENDA -->
     <div class="legend">
         <div class="legend-item">
             <div class="seat available"></div>
@@ -90,44 +85,43 @@
         </div>
     </div>
 
-    <!-- FORMULAR CONFIRMARE -->
     <div class="confirm-panel" id="confirmPanel">
-        <form th:action="@{/rezervare}" method="post">
-            <input type="hidden" name="film" th:value="${film}"/>
-            <input type="hidden" name="locuri" id="locuriInput" value="1"/>
-            <input type="hidden" name="nrSala" id="nrSalaHidden" value=""/>
+        <form th:action="@{/reservation}" method="post">
+            <input type="hidden" name="movie" th:value="${movie}"/>
+            <input type="hidden" name="seats" id="seatsInput" value="1"/>
+            <input type="hidden" name="hallNumber" id="hallNumberHidden" value=""/>
 
             <div class="confirm-header">
-                <h3>🎟️ Confirm Reservations</h3>
+                <h3>🎟️ Complete Your Reservation</h3>
                 <div class="confirm-movie-badge">
-                    <span class="movie-name" th:text="${film}"></span>
+                    <span class="movie-name" th:text="${movie}"></span>
                     <span class="seat-badge">💺 <span id="selectedSeatLabel">-</span></span>
                 </div>
             </div>
 
             <div class="confirm-fields">
                 <div class="field-group">
-                    <label><span class="field-icon">👤</span>Your name </label>
-                    <input type="text" name="nume" placeholder="ex: Ion Popescu"
+                    <label><span class="field-icon">👤</span>Your Name</label>
+                    <input type="text" name="name" placeholder="e.g. John Smith"
                            required autocomplete="off"/>
                 </div>
 
                 <div class="confirm-row">
                     <div class="field-group">
-                        <label><span class="field-icon">🏛️</span>Selected hall</label>
-                        <input type="text" id="salaDisplay" readonly
-                               placeholder="Selectează sala mai sus"/>
+                        <label><span class="field-icon">🏛️</span>Selected Hall</label>
+                        <input type="text" id="hallDisplay" readonly
+                               placeholder="Select a hall above"/>
                     </div>
 
                     <div class="field-group">
-                        <label><span class="field-icon">📅</span>Date</label>
-                        <input type="date" name="dataRezervare" required/>
+                        <label><span class="field-icon">📅</span>Reservation Date</label>
+                        <input type="date" name="reservationDate" required/>
                     </div>
                 </div>
             </div>
 
             <button type="submit" class="btn-confirm">
-                <span>✅</span> Confirm reservation
+                <span>✅</span> Confirm Reservation
             </button>
         </form>
     </div>
@@ -135,72 +129,72 @@
 </div>
 
 <script>
-    function adaugaEventListeners() {
-     document.querySelectorAll('.seat.available').forEach(seat => {
-         seat.removeEventListener('click', seatClickHandler);
-         seat.addEventListener('click', seatClickHandler);
-     });
- }
+    function addEventListeners() {
+        document.querySelectorAll('.seat.available').forEach(seat => {
+            seat.removeEventListener('click', seatClickHandler);
+            seat.addEventListener('click', seatClickHandler);
+        });
+    }
 
- function seatClickHandler() {
-     const nrSala = document.getElementById('salaSelect').value;
-     if (!nrSala) {
-         alert('Te rugăm să selectezi o sală mai întâi!');
-         return;
-     }
+    function seatClickHandler() {
+        const hallNumber = document.getElementById('salaSelect').value;
+        if (!hallNumber) {
+            alert('Please select a hall first!');
+            return;
+        }
 
-     document.querySelectorAll('.seat.selected').forEach(s => {
-         s.classList.remove('selected');
-         s.classList.add('available');
-     });
+        document.querySelectorAll('.seat.selected').forEach(s => {
+            s.classList.remove('selected');
+            s.classList.add('available');
+        });
 
-     this.classList.remove('available');
-     this.classList.add('selected');
+        this.classList.remove('available');
+        this.classList.add('selected');
 
-     const seatId = this.getAttribute('data-seat');
-     const salaText = document.getElementById('salaSelect').options[
-         document.getElementById('salaSelect').selectedIndex
-     ].text;
+        const seatId = this.getAttribute('data-seat');
+        const hallText = document.getElementById('salaSelect').options[
+            document.getElementById('salaSelect').selectedIndex
+        ].text;
 
-     document.getElementById('selectedSeatLabel').textContent = seatId;
-     document.getElementById('nrSalaHidden').value = nrSala;
-     document.getElementById('salaDisplay').value = salaText;
-     document.getElementById('confirmPanel').classList.add('visible');
- }
+        document.getElementById('selectedSeatLabel').textContent = seatId;
+        document.getElementById('hallNumberHidden').value = hallNumber;
+        document.getElementById('hallDisplay').value = hallText;
+        document.getElementById('confirmPanel').classList.add('visible');
+    }
 
- document.getElementById('salaSelect').addEventListener('change', function() {
-     const nrSala = this.value;
-     if (!nrSala) return;
+    document.getElementById('salaSelect').addEventListener('change', function() {
+        const hallNumber = this.value;
+        if (!hallNumber) return;
 
-     const salaText = this.options[this.selectedIndex].text; // ← definit corect aici
+        const hallText = this.options[this.selectedIndex].text;
 
-     fetch(`/seats/ocupate?nrSala=${nrSala}`)
-         .then(res => res.json())
-         .then(data => {
-             const locuriOcupate = data.locuriOcupate;
-             const seats = document.querySelectorAll('.cinema-hall .seat');
+        fetch(`/seats/occupied?hallNumber=${hallNumber}`)
+            .then(res => res.json())
+            .then(data => {
+                const occupiedSeats = data.occupiedSeats;
+                const seats = document.querySelectorAll('.cinema-hall .seat');
 
-             seats.forEach((seat, index) => {
-                 seat.classList.remove('occupied', 'available', 'selected');
-                 if (index < locuriOcupate) {
-                     seat.classList.add('occupied');
-                 } else {
-                     seat.classList.add('available');
-                 }
-             });
+                seats.forEach((seat, index) => {
+                    seat.classList.remove('occupied', 'available', 'selected');
+                    if (index < occupiedSeats) {
+                        seat.classList.add('occupied');
+                    } else {
+                        seat.classList.add('available');
+                    }
+                });
 
-             document.getElementById('salaInfo').textContent =
-                 `${20 - locuriOcupate} locuri libere`;
-             document.getElementById('selectedSeatLabel').textContent = '-';
-             document.getElementById('salaDisplay').value = salaText;
-             document.getElementById('confirmPanel').classList.remove('visible');
-             document.getElementById('nrSalaHidden').value = '';
+                document.getElementById('salaInfo').textContent =
+                    `${20 - occupiedSeats} seats available`;
+                document.getElementById('selectedSeatLabel').textContent = '-';
+                document.getElementById('hallDisplay').value = hallText;
+                document.getElementById('confirmPanel').classList.remove('visible');
+                document.getElementById('hallNumberHidden').value = '';
 
-             adaugaEventListeners();
-         });
- });
+                addEventListeners();
+            });
+    });
 
- adaugaEventListeners();
+    addEventListeners();
 </script>
 
 </body>

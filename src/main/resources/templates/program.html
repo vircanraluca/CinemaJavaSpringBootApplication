@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      lang="ro">
+      lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Program Cinema</title>
+    <title>Cinema Schedule</title>
     <link rel="stylesheet" th:href="@{/css/program.css}"/>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
-        <a th:href="@{/program}" class="active">📅 Program</a>
-        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
-        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
-        <a th:href="@{/salveazaFisier}">💾 Save files</a>
+        <a th:href="@{/program}" class="active">📅 Schedule</a>
+        <a th:href="@{/reservations}">📋 Reservations</a>
+        <a th:href="@{/hallCapacity}">💺 Capacity</a>
+        <a th:href="@{/saveFile}">💾 Save File</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
 
 <div class="page-container">
 
-    <h1 class="page-title">📅 Program Cinema</h1>
+    <h1 class="page-title">📅 Cinema Schedule</h1>
 
-    <!-- FILTRE -->
     <div class="filters-card">
         <form th:action="@{/program}" method="get" class="filters-form">
             <div class="filter-group">
-                <label>🎭 Gen</label>
-                <select name="gen">
-                    <option value="">All gender</option>
-                    <option th:each="g : ${genuri}"
+                <label>🎭 Genre</label>
+                <select name="genre">
+                    <option value="">All genres</option>
+                    <option th:each="g : ${genres}"
                             th:value="${g}"
                             th:text="${g}"
-                            th:selected="${g == genSelectat}">
+                            th:selected="${g == selectedGenre}">
                     </option>
                 </select>
             </div>
@@ -47,34 +45,33 @@
         </form>
     </div>
 
-    <!-- FILME -->
-    <div th:if="${filme.empty}" class="empty-state">
+    <div th:if="${movies.empty}" class="empty-state">
         <span>🎭</span>
-        <p>There is no movie for the selected movie</p>
+        <p>No movies found for the selected genre.</p>
     </div>
 
-    <div th:if="${!filme.empty}" class="program-grid">
-        <div th:each="film : ${filme}" class="program-card">
+    <div th:if="${!movies.empty}" class="program-grid">
+        <div th:each="movie : ${movies}" class="program-card">
             <div class="card-poster">
-                <img th:src="${film.imagine}" th:alt="${film.titlu}"
+                <img th:src="${movie.image}" th:alt="${movie.title}"
                      onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'"/>
             </div>
             <div class="card-header">
-                <span class="film-title" th:text="${film.titlu}"></span>
-                <span class="gen-badge" th:text="${film.gen}"></span>
+                <span class="film-title" th:text="${movie.title}"></span>
+                <span class="gen-badge" th:text="${movie.genre}"></span>
             </div>
             <div class="card-body">
                 <div class="card-row">
                     <span class="label">⏱️ Duration</span>
-                    <span th:text="${film.durata} + ' min'"></span>
+                    <span th:text="${movie.duration} + ' min'"></span>
                 </div>
                 <div class="card-row">
                     <span class="label">📅 Year</span>
-                    <span th:text="${film.an}"></span>
+                    <span th:text="${movie.year}"></span>
                 </div>
-                <div class="card-desc" th:text="${film.descriere}"></div>
-                <a th:href="@{/seats(film=${film.titlu}, nrSala=1, dataRezervare=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')})}"
-                   class="btn-rezerva">🎟️ Make reservation now</a>
+                <div class="card-desc" th:text="${movie.description}"></div>
+                <a th:href="@{/seats(movie=${movie.title}, hallNumber=1, reservationDate=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')})}"
+                   class="btn-rezerva">🎟️ Reserve Now</a>
             </div>
         </div>
     </div>
