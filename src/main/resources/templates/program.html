@@ -15,8 +15,9 @@
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
         <a th:href="@{/program}" class="active">📅 Program</a>
-        <a th:href="@{/afisareRezervari}">📋 Rezervări</a>
-        <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
+        <a th:href="@{/salveazaFisier}">💾 Save files</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
@@ -31,7 +32,7 @@
             <div class="filter-group">
                 <label>🎭 Gen</label>
                 <select name="gen">
-                    <option value="">Toate genurile</option>
+                    <option value="">All gender</option>
                     <option th:each="g : ${genuri}"
                             th:value="${g}"
                             th:text="${g}"
@@ -40,8 +41,8 @@
                 </select>
             </div>
             <div class="filter-actions">
-                <button type="submit" class="btn-filter">🔍 Filtrează</button>
-                <a th:href="@{/program}" class="btn-reset">✕ Resetează</a>
+                <button type="submit" class="btn-filter">🔍 Filter</button>
+                <a th:href="@{/program}" class="btn-reset">✕ Reset</a>
             </div>
         </form>
     </div>
@@ -49,7 +50,7 @@
     <!-- FILME -->
     <div th:if="${filme.empty}" class="empty-state">
         <span>🎭</span>
-        <p>Nu există filme pentru genul selectat.</p>
+        <p>There is no movie for the selected movie</p>
     </div>
 
     <div th:if="${!filme.empty}" class="program-grid">
@@ -64,16 +65,16 @@
             </div>
             <div class="card-body">
                 <div class="card-row">
-                    <span class="label">⏱️ Durată</span>
+                    <span class="label">⏱️ Duration</span>
                     <span th:text="${film.durata} + ' min'"></span>
                 </div>
                 <div class="card-row">
-                    <span class="label">📅 An</span>
+                    <span class="label">📅 Year</span>
                     <span th:text="${film.an}"></span>
                 </div>
                 <div class="card-desc" th:text="${film.descriere}"></div>
                 <a th:href="@{/seats(film=${film.titlu}, nrSala=1, dataRezervare=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')})}"
-                   class="btn-rezerva">🎟️ Rezervă</a>
+                   class="btn-rezerva">🎟️ Make reservation now</a>
             </div>
         </div>
     </div>

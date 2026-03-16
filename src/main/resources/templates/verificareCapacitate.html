@@ -12,45 +12,46 @@
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
         <a th:href="@{/program}">📅 Program</a>
-        <a th:href="@{/afisareRezervari}">📋 Rezervări</a>
-        <a th:href="@{/verificareCapacitate}" class="active">💺 Capacitate</a>
+        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
+        <a th:href="@{/salveazaFisier}">💾 Save files</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="header">
-        <h1>💺 Verificare Capacitate</h1>
-        <a th:href="@{/}" class="btn btn-secondary">← Înapoi</a>
+        <h1>💺 Check capacity</h1>
+        <a th:href="@{/}" class="btn btn-secondary">← Back</a>
     </div>
 
     <div class="card">
         <form th:action="@{/verificareCapacitate}" method="post">
             <div class="form-group">
-                <label>Selectează sala</label>
+                <label>Please select the hall</label>
                 <select name="nrSala" required>
-                    <option value="">-- Selectează sala --</option>
+                    <option value="">-- Select the hall --</option>
                     <option th:each="sala : ${sali}"
                             th:value="${sala}"
                             th:text="'Sala ' + ${sala}">
                     </option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Verifică</button>
+            <button type="submit" class="btn btn-primary">Check</button>
         </form>
     </div>
 
     <!-- Rezultat -->
     <div th:if="${locuriLibere != null}" class="card">
-        <h3>Sala <span th:text="${nrSala}"></span></h3>
-        <p>Locuri libere:
+        <h3>Hall <span th:text="${nrSala}"></span></h3>
+        <p>Available seats:
             <strong th:text="${locuriLibere}"
                     th:class="${locuriLibere == 0} ? 'text-danger' : 'text-success'">
             </strong>
             / 20
         </p>
         <div th:if="${locuriLibere == 0}" class="alert alert-error">
-            Sală plină!
+            All the seats are booked!
         </div>
     </div>
 

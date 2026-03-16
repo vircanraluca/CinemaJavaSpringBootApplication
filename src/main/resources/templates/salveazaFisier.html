@@ -12,16 +12,17 @@
   <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
   <div class="navbar-links">
     <a th:href="@{/program}">📅 Program</a>
-    <a th:href="@{/afisareRezervari}">📋 Rezervări</a>
-    <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+    <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
+    <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
+    <a th:href="@{/salveazaFisier}">💾 Save files</a>
     <a th:href="@{/logout}" class="logout">⏻ Logout</a>
   </div>
 </nav>
 
 <div class="container">
   <div class="header">
-    <h1>💾 Salvează Fișier</h1>
-    <a th:href="@{/}" class="btn btn-secondary">← Înapoi</a>
+    <h1>💾 Save the file </h1>
+    <a th:href="@{/}" class="btn btn-secondary">← Back</a>
   </div>
 
   <div th:if="${success}" class="card">

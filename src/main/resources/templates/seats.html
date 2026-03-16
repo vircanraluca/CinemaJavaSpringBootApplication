@@ -23,8 +23,8 @@
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
         <a th:href="@{/program}">📅 Program</a>
-        <a th:href="@{/afisareRezervari}">📋 Rezervări</a>
-        <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
@@ -32,20 +32,20 @@
 <div class="page-container">
 
     <div class="movie-info">
-        <h1 th:text="${film}">Nume Film</h1>
+        <h1 th:text="${film}">Movie name</h1>
         <div class="sala-selector">
-            <label>🏛️ Selectează sala:</label>
+            <label>🏛️ Select hall:</label>
             <select id="salaSelect">
-                <option value="">-- Alege sala --</option>
-                <option value="1">Sala 1</option>
-                <option value="2">Sala 2</option>
-                <option value="3">Sala 3</option>
-                <option value="4">Sala 4</option>
-                <option value="5">Sala 5</option>
-                <option value="6">Sala 6</option>
-                <option value="7">Sala 7</option>
-                <option value="8">Sala 8</option>
-                <option value="9">Sala 9</option>
+                <option value="">-- Select Hall --</option>
+                <option value="1">Hall 1</option>
+                <option value="2">Hall 2</option>
+                <option value="3">Hall 3</option>
+                <option value="4">Hall 4</option>
+                <option value="5">Hall 5</option>
+                <option value="6">Hall 6</option>
+                <option value="7">Hall 7</option>
+                <option value="8">Hall 8</option>
+                <option value="9">Hall 9</option>
             </select>
             <span id="salaInfo"></span>
         </div>
@@ -53,7 +53,7 @@
 
     <!-- ECRAN -->
     <div class="screen-wrapper">
-        <div class="screen">ECRAN</div>
+        <div class="screen">SCREEN</div>
         <div class="screen-shadow"></div>
     </div>
 
@@ -78,15 +78,15 @@
     <div class="legend">
         <div class="legend-item">
             <div class="seat available"></div>
-            <span>Liber</span>
+            <span>Available</span>
         </div>
         <div class="legend-item">
             <div class="seat occupied"></div>
-            <span>Ocupat</span>
+            <span>Occupied</span>
         </div>
         <div class="legend-item">
             <div class="seat selected"></div>
-            <span>Selectat</span>
+            <span>Selected</span>
         </div>
     </div>
 
@@ -98,7 +98,7 @@
             <input type="hidden" name="nrSala" id="nrSalaHidden" value=""/>
 
             <div class="confirm-header">
-                <h3>🎟️ Finalizează Rezervarea</h3>
+                <h3>🎟️ Confirm Reservations</h3>
                 <div class="confirm-movie-badge">
                     <span class="movie-name" th:text="${film}"></span>
                     <span class="seat-badge">💺 <span id="selectedSeatLabel">-</span></span>
@@ -107,27 +107,27 @@
 
             <div class="confirm-fields">
                 <div class="field-group">
-                    <label><span class="field-icon">👤</span>Numele tău</label>
+                    <label><span class="field-icon">👤</span>Your name </label>
                     <input type="text" name="nume" placeholder="ex: Ion Popescu"
                            required autocomplete="off"/>
                 </div>
 
                 <div class="confirm-row">
                     <div class="field-group">
-                        <label><span class="field-icon">🏛️</span>Sală selectată</label>
+                        <label><span class="field-icon">🏛️</span>Selected hall</label>
                         <input type="text" id="salaDisplay" readonly
                                placeholder="Selectează sala mai sus"/>
                     </div>
 
                     <div class="field-group">
-                        <label><span class="field-icon">📅</span>Data rezervării</label>
+                        <label><span class="field-icon">📅</span>Date</label>
                         <input type="date" name="dataRezervare" required/>
                     </div>
                 </div>
             </div>
 
             <button type="submit" class="btn-confirm">
-                <span>✅</span> Confirmă Rezervarea
+                <span>✅</span> Confirm reservation
             </button>
         </form>
     </div>

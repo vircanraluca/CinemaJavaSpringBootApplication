@@ -11,24 +11,24 @@
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
         <a th:href="@{/program}">📅 Program</a>
-        <a th:href="@{/afisareRezervari}" class="active">📋 Rezervări</a>
-        <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+        <a th:href="@{/afisareRezervari}" class="active">📋 Reservations</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacity</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
 <div class="container">
     <div class="header">
-        <h1>📋 Afișare Rezervări</h1>
-        <a th:href="@{/}" class="btn btn-secondary">← Înapoi</a>
+        <h1>📋 Reservations</h1>
+        <a th:href="@{/}" class="btn btn-secondary">← Back</a>
     </div>
 
     <div class="card">
         <form th:action="@{/afisareRezervari}" method="post">
             <div class="form-group">
-                <label>Caută după nume</label>
-                <input type="text" name="nume" th:value="${nume}" placeholder="Introduceți numele" required/>
+                <label>Search by name</label>
+                <input type="text" name="nume" th:value="${nume}" placeholder="Insert the name" required/>
             </div>
-            <button type="submit" class="btn btn-primary">Caută</button>
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
     </div>
 
@@ -36,20 +36,20 @@
     <div th:if="${rezervari != null}">
 
         <div th:if="${#lists.isEmpty(rezervari)}" class="alert alert-error">
-            Nu există rezervări pentru <strong th:text="${nume}"></strong>
+            Reservation are not available for <strong th:text="${nume}"></strong>
         </div>
 
         <div th:if="${!#lists.isEmpty(rezervari)}">
-            <h3>Rezervări pentru <span th:text="${nume}"></span>:</h3>
+            <h3>Reservation for  <span th:text="${nume}"></span>:</h3>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Film</th>
-                    <th>Sală</th>
-                    <th>Locuri</th>
-                    <th>Data</th>
-                    <th>Acțiuni</th>
+                    <th>Movie</th>
+                    <th>Hall</th>
+                    <th>Seats</th>
+                    <th>Date</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -63,7 +63,7 @@
                         <form th:action="@{/stergeRezervare}" method="post"
                               onsubmit="return confirm('Sigur doriți să ștergeți rezervarea?')">
                             <input type="hidden" name="id" th:value="${rez.id}"/>
-                            <button type="submit" class="btn btn-danger">Șterge</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>

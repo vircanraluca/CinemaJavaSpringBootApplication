@@ -9,7 +9,7 @@
 <div class="container">
     <div class="card">
         <h1>🎬 Cinema App</h1>
-        <h2>Înregistrare</h2>
+        <h2>Register</h2>
 
         <!-- Eroare -->
         <div th:if="${error}" class="alert alert-error">
@@ -34,10 +34,10 @@
                 <label>Parolă</label>
                 <input type="password" name="password" placeholder="Parolă" required/>
             </div>
-            <button type="submit" class="btn btn-primary">Înregistrare</button>
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
 
-        <p>Ai cont deja? <a th:href="@{/login}">Autentifică-te</a></p>
+        <p>Do you already have an account? <a th:href="@{/login}">Log IN</a></p>
     </div>
 </div>
 </body>
