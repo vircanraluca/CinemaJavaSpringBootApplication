@@ -70,43 +70,66 @@
     </div>
 
     <!-- FORMULAR CONFIRMARE -->
+    <!-- FORMULAR CONFIRMARE -->
     <div class="confirm-panel" id="confirmPanel">
         <form th:action="@{/rezervare}" method="post">
             <input type="hidden" name="film" th:value="${film}"/>
             <input type="hidden" name="locuri" id="locuriInput" value="1"/>
 
-            <div class="confirm-info">
-                <span>🎬 <strong th:text="${film}"></strong></span>
-                <span>💺 Loc selectat: <strong id="selectedSeatLabel">-</strong></span>
+            <div class="confirm-header">
+                <h3>🎟️ Finalizează Rezervarea</h3>
+                <div class="confirm-movie-badge">
+                    <span class="movie-name" th:text="${film}"></span>
+                    <span class="seat-badge">💺 <span id="selectedSeatLabel">-</span></span>
+                </div>
             </div>
 
-            <div class="confirm-name">
-                <label>👤 Numele tău</label>
-                <input type="text" name="nume" placeholder="ex: Ion Popescu" required/>
+            <div class="confirm-fields">
+                <div class="field-group">
+                    <label>
+                        <span class="field-icon">👤</span>
+                        Numele tău
+                    </label>
+                    <input type="text"
+                           name="nume"
+                           placeholder="ex: Ion Popescu"
+                           required
+                           autocomplete="off"/>
+                </div>
+
+                <div class="confirm-row">
+                    <div class="field-group">
+                        <label>
+                            <span class="field-icon">🏛️</span>
+                            Sală
+                        </label>
+                        <select name="nrSala" required>
+                            <option value="">Selectează</option>
+                            <option value="1">Sala 1</option>
+                            <option value="2">Sala 2</option>
+                            <option value="3">Sala 3</option>
+                            <option value="4">Sala 4</option>
+                            <option value="5">Sala 5</option>
+                            <option value="6">Sala 6</option>
+                            <option value="7">Sala 7</option>
+                            <option value="8">Sala 8</option>
+                            <option value="9">Sala 9</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label>
+                            <span class="field-icon">📅</span>
+                            Data rezervării
+                        </label>
+                        <input type="date" name="dataRezervare" required/>
+                    </div>
+                </div>
             </div>
 
-            <div class="confirm-name">
-                <label>🏛️ Sală</label>
-                <select name="nrSala" required>
-                    <option value="">-- Selectează sala --</option>
-                    <option value="1">Sala 1</option>
-                    <option value="2">Sala 2</option>
-                    <option value="3">Sala 3</option>
-                    <option value="4">Sala 4</option>
-                    <option value="5">Sala 5</option>
-                    <option value="6">Sala 6</option>
-                    <option value="7">Sala 7</option>
-                    <option value="8">Sala 8</option>
-                    <option value="9">Sala 9</option>
-                </select>
-            </div>
-
-            <div class="confirm-name">
-                <label>📅 Data rezervării</label>
-                <input type="date" name="dataRezervare" required/>
-            </div>
-
-            <button type="submit" class="btn-confirm">✅ Confirmă Rezervarea</button>
+            <button type="submit" class="btn-confirm">
+                <span>✅</span> Confirmă Rezervarea
+            </button>
         </form>
     </div>
 
