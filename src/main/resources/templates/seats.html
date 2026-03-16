@@ -136,24 +136,57 @@
 </div>
 
 <script>
+    function adaugaEventListeners() {
     document.querySelectorAll('.seat.available').forEach(seat => {
-        seat.addEventListener('click', function () {
-            // Deselectează orice alt loc
-            document.querySelectorAll('.seat.selected').forEach(s => {
-                s.classList.remove('selected');
-                s.classList.add('available');
+        seat.removeEventListener('click', seatClickHandler);
+        seat.addEventListener('click', seatClickHandler);
+    });
+}
+
+function seatClickHandler() {
+    document.querySelectorAll('.seat.selected').forEach(s => {
+        s.classList.remove('selected');
+        s.classList.add('available');
+    });
+
+    this.classList.remove('available');
+    this.classList.add('selected');
+
+    const seatId = this.getAttribute('data-seat');
+    document.getElementById('selectedSeatLabel').textContent = seatId;
+    document.getElementById('confirmPanel').classList.add('visible');
+}
+
+// Când se schimbă sala
+document.querySelector('select[name="nrSala"]').addEventListener('change', function() {
+    const nrSala = this.value;
+    if (!nrSala) return;
+
+    fetch(`/seats/ocupate?nrSala=${nrSala}`)
+        .then(res => res.json())
+        .then(data => {
+            const locuriOcupate = data.locuriOcupate;
+            const seats = document.querySelectorAll('.seat');
+
+            seats.forEach((seat, index) => {
+                seat.classList.remove('occupied', 'available', 'selected');
+                if (index < locuriOcupate) {
+                    seat.classList.add('occupied');
+                } else {
+                    seat.classList.add('available');
+                }
             });
 
-            // Selectează locul curent
-            this.classList.remove('available');
-            this.classList.add('selected');
+            // Resetează panoul
+            document.getElementById('selectedSeatLabel').textContent = '-';
+            document.getElementById('confirmPanel').classList.remove('visible');
 
-            // Actualizează panoul de confirmare
-            const seatId = this.getAttribute('data-seat');
-            document.getElementById('selectedSeatLabel').textContent = seatId;
-            document.getElementById('confirmPanel').classList.add('visible');
+            adaugaEventListeners();
         });
-    });
+});
+
+// Inițializare
+adaugaEventListeners();
 </script>
 
 </body>

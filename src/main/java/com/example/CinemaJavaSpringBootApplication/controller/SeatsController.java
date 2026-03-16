@@ -6,10 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class SeatsController {
@@ -31,6 +34,15 @@ public class SeatsController {
         model.addAttribute("film", film);
         model.addAttribute("randuri", randuri);
         return "seats";
+    }
+
+    @GetMapping("/seats/ocupate")
+    @ResponseBody
+    public Map<String, Object> getLocuriOcupate(@RequestParam Integer nrSala) {
+        int ocupate = rezervareRepository.getLocuriOcupate(nrSala);
+        Map<String, Object> result = new HashMap<>();
+        result.put("locuriOcupate", ocupate);
+        return result;
     }
 
     private List<Rand> genereazaRanduri(int locuriOcupate) {
