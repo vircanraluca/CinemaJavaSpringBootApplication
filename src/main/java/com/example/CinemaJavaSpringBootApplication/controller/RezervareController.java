@@ -50,11 +50,18 @@ public class RezervareController {
             return "redirect:/confirmare?film=" + rezervare.getFilm()
                     + "&data=" + rezervare.getDataRezervare();
         } catch (IllegalArgumentException | IllegalStateException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("rezervare", new Rezervare());
-            model.addAttribute("filme", getFilme());
-            model.addAttribute("sali", getSali());
-            return "rezervare";
+            try {
+                String errorEncoded = java.net.URLEncoder.encode(
+                        e.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
+                String filmEncoded = java.net.URLEncoder.encode(
+                        rezervare.getFilm(), java.nio.charset.StandardCharsets.UTF_8);
+                return "redirect:/seats?film=" + filmEncoded
+                        + "&nrSala=" + rezervare.getNrSala()
+                        + "&error=" + errorEncoded;
+            } catch (Exception ex) {
+                return "redirect:/seats?film=" + rezervare.getFilm()
+                        + "&nrSala=" + rezervare.getNrSala() + "&error=Eroare";
+            }
         }
     }
 

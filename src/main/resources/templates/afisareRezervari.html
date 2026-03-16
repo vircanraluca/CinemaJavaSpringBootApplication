@@ -1,16 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">select * from rezervari
 <head>
     <meta charset="UTF-8">
     <title>Rezervări - Cinema</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-
+<nav class="navbar">
+    <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+    <div class="navbar-links">
+        <a th:href="@{/rezervare}">🎟️ Rezervare nouă</a>
+        <a th:href="@{/program}">📅 Program</a>
+        <a th:href="@{/afisareRezervari}" class="active">📋 Rezervările mele</a>
+        <a th:href="@{/verificareCapacitate}">💺 Capacitate</a>
+        <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+    </div>
+</nav>
 <div class="container">
     <div class="header">
         <h1>📋 Afișare Rezervări</h1>
-        <a th:href="@{/dashboard}" class="btn btn-secondary">← Înapoi</a>
+        <a th:href="@{/}" class="btn btn-secondary">← Înapoi</a>
     </div>
 
     <div class="card">

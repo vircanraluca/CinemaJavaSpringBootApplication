@@ -27,6 +27,7 @@ public class SeatsController {
     public String showSeats(
             @RequestParam String film,
             @RequestParam Integer nrSala,
+            @RequestParam(required = false) String error,
             Model model) {
 
         int locuriOcupate = rezervareRepository.getLocuriOcupate(nrSala);
@@ -35,6 +36,7 @@ public class SeatsController {
         model.addAttribute("film", film);
         model.addAttribute("nrSala", nrSala);
         model.addAttribute("randuri", randuri);
+        model.addAttribute("error", error);
         return "seats";
     }
 

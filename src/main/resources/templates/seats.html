@@ -8,6 +8,16 @@
 </head>
 <body>
 
+<!-- POPUP EROARE -->
+<div id="errorPopup" th:if="${error}" class="error-popup">
+    <div class="error-popup-content">
+        <span class="error-icon">⚠️</span>
+        <p th:text="${error}"></p>
+        <button onclick="document.getElementById('errorPopup').style.display='none'"
+                class="btn-close-popup">OK</button>
+    </div>
+</div>
+
 <!-- NAVBAR -->
 <nav class="navbar">
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>

@@ -480,6 +480,53 @@ input[readonly] {
     font-weight: 600;
     cursor: not-allowed;
 }
+
+/*pop-up*/
+.error-popup {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-popup-content {
+    background: #1a1a1a;
+    border: 1px solid #e50914;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.error-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.error-popup-content p {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-close-popup {
+    background: #e50914;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-close-popup:hover { background: #c40812; }
 /* RESPONSIVE */
 @media (max-width: 600px) {
     .confirm-row {
