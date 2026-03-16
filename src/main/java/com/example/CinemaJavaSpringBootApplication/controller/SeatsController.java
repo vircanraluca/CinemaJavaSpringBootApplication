@@ -26,12 +26,14 @@ public class SeatsController {
     @GetMapping("/seats")
     public String showSeats(
             @RequestParam String film,
+            @RequestParam Integer nrSala,
             Model model) {
 
-        // Generează sala goală - scaunele ocupate se vor actualiza după ce userul alege sala
-        List<Rand> randuri = genereazaRanduri(0);
+        int locuriOcupate = rezervareRepository.getLocuriOcupate(nrSala);
+        List<Rand> randuri = genereazaRanduri(locuriOcupate);
 
         model.addAttribute("film", film);
+        model.addAttribute("nrSala", nrSala);
         model.addAttribute("randuri", randuri);
         return "seats";
     }

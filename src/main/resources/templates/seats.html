@@ -24,10 +24,22 @@
 
     <div class="movie-info">
         <h1 th:text="${film}">Nume Film</h1>
-        <p>Sala <strong th:text="${nrSala}">1</strong>
-            &nbsp;|&nbsp;
-            <span th:text="${dataRezervare}">2024-01-01</span>
-        </p>
+        <div class="sala-selector">
+            <label>🏛️ Selectează sala:</label>
+            <select id="salaSelect">
+                <option value="">-- Alege sala --</option>
+                <option value="1">Sala 1</option>
+                <option value="2">Sala 2</option>
+                <option value="3">Sala 3</option>
+                <option value="4">Sala 4</option>
+                <option value="5">Sala 5</option>
+                <option value="6">Sala 6</option>
+                <option value="7">Sala 7</option>
+                <option value="8">Sala 8</option>
+                <option value="9">Sala 9</option>
+            </select>
+            <span id="salaInfo"></span>
+        </div>
     </div>
 
     <!-- ECRAN -->
@@ -70,11 +82,11 @@
     </div>
 
     <!-- FORMULAR CONFIRMARE -->
-    <!-- FORMULAR CONFIRMARE -->
     <div class="confirm-panel" id="confirmPanel">
         <form th:action="@{/rezervare}" method="post">
             <input type="hidden" name="film" th:value="${film}"/>
             <input type="hidden" name="locuri" id="locuriInput" value="1"/>
+            <input type="hidden" name="nrSala" id="nrSalaHidden" value=""/>
 
             <div class="confirm-header">
                 <h3>🎟️ Finalizează Rezervarea</h3>
@@ -86,42 +98,14 @@
 
             <div class="confirm-fields">
                 <div class="field-group">
-                    <label>
-                        <span class="field-icon">👤</span>
-                        Numele tău
-                    </label>
-                    <input type="text"
-                           name="nume"
-                           placeholder="ex: Ion Popescu"
-                           required
-                           autocomplete="off"/>
+                    <label><span class="field-icon">👤</span>Numele tău</label>
+                    <input type="text" name="nume" placeholder="ex: Ion Popescu"
+                           required autocomplete="off"/>
                 </div>
 
                 <div class="confirm-row">
                     <div class="field-group">
-                        <label>
-                            <span class="field-icon">🏛️</span>
-                            Sală
-                        </label>
-                        <select name="nrSala" required>
-                            <option value="">Selectează</option>
-                            <option value="1">Sala 1</option>
-                            <option value="2">Sala 2</option>
-                            <option value="3">Sala 3</option>
-                            <option value="4">Sala 4</option>
-                            <option value="5">Sala 5</option>
-                            <option value="6">Sala 6</option>
-                            <option value="7">Sala 7</option>
-                            <option value="8">Sala 8</option>
-                            <option value="9">Sala 9</option>
-                        </select>
-                    </div>
-
-                    <div class="field-group">
-                        <label>
-                            <span class="field-icon">📅</span>
-                            Data rezervării
-                        </label>
+                        <label><span class="field-icon">📅</span>Data rezervării</label>
                         <input type="date" name="dataRezervare" required/>
                     </div>
                 </div>
@@ -136,57 +120,67 @@
 </div>
 
 <script>
+    const filmParam = /*[[${film}]]*/ '';
+
     function adaugaEventListeners() {
-    document.querySelectorAll('.seat.available').forEach(seat => {
-        seat.removeEventListener('click', seatClickHandler);
-        seat.addEventListener('click', seatClickHandler);
-    });
-}
-
-function seatClickHandler() {
-    document.querySelectorAll('.seat.selected').forEach(s => {
-        s.classList.remove('selected');
-        s.classList.add('available');
-    });
-
-    this.classList.remove('available');
-    this.classList.add('selected');
-
-    const seatId = this.getAttribute('data-seat');
-    document.getElementById('selectedSeatLabel').textContent = seatId;
-    document.getElementById('confirmPanel').classList.add('visible');
-}
-
-// Când se schimbă sala
-document.querySelector('select[name="nrSala"]').addEventListener('change', function() {
-    const nrSala = this.value;
-    if (!nrSala) return;
-
-    fetch(`/seats/ocupate?nrSala=${nrSala}`)
-        .then(res => res.json())
-        .then(data => {
-            const locuriOcupate = data.locuriOcupate;
-            const seats = document.querySelectorAll('.seat');
-
-            seats.forEach((seat, index) => {
-                seat.classList.remove('occupied', 'available', 'selected');
-                if (index < locuriOcupate) {
-                    seat.classList.add('occupied');
-                } else {
-                    seat.classList.add('available');
-                }
-            });
-
-            // Resetează panoul
-            document.getElementById('selectedSeatLabel').textContent = '-';
-            document.getElementById('confirmPanel').classList.remove('visible');
-
-            adaugaEventListeners();
+        document.querySelectorAll('.seat.available').forEach(seat => {
+            seat.removeEventListener('click', seatClickHandler);
+            seat.addEventListener('click', seatClickHandler);
         });
-});
+    }
 
-// Inițializare
-adaugaEventListeners();
+    function seatClickHandler() {
+        const nrSala = document.getElementById('salaSelect').value;
+        if (!nrSala) {
+            alert('Te rugăm să selectezi o sală mai întâi!');
+            return;
+        }
+
+        document.querySelectorAll('.seat.selected').forEach(s => {
+            s.classList.remove('selected');
+            s.classList.add('available');
+        });
+
+        this.classList.remove('available');
+        this.classList.add('selected');
+
+        const seatId = this.getAttribute('data-seat');
+        document.getElementById('selectedSeatLabel').textContent = seatId;
+        document.getElementById('nrSalaHidden').value = nrSala;
+        document.getElementById('confirmPanel').classList.add('visible');
+    }
+
+    // Când se schimbă sala — reîncarcă locurile ocupate
+    document.getElementById('salaSelect').addEventListener('change', function() {
+        const nrSala = this.value;
+        if (!nrSala) return;
+
+        fetch(`/seats/ocupate?nrSala=${nrSala}`)
+            .then(res => res.json())
+            .then(data => {
+                const locuriOcupate = data.locuriOcupate;
+                const seats = document.querySelectorAll('.cinema-hall .seat');
+
+                seats.forEach((seat, index) => {
+                    seat.classList.remove('occupied', 'available', 'selected');
+                    if (index < locuriOcupate) {
+                        seat.classList.add('occupied');
+                    } else {
+                        seat.classList.add('available');
+                    }
+                });
+
+                document.getElementById('salaInfo').textContent =
+                    `${20 - locuriOcupate} locuri libere`;
+                document.getElementById('selectedSeatLabel').textContent = '-';
+                document.getElementById('confirmPanel').classList.remove('visible');
+                document.getElementById('nrSalaHidden').value = '';
+
+                adaugaEventListeners();
+            });
+    });
+
+    adaugaEventListeners();
 </script>
 
 </body>
