@@ -1,14 +1,18 @@
 package com.example.CinemaJavaSpringBootApplication.controller;
 
+import com.example.CinemaJavaSpringBootApplication.export.RezervareExporter;
 import com.example.CinemaJavaSpringBootApplication.model.Movie;
 import com.example.CinemaJavaSpringBootApplication.model.Rezervare;
 import com.example.CinemaJavaSpringBootApplication.repository.MovieRepository;
 import com.example.CinemaJavaSpringBootApplication.service.RezervareService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -18,11 +22,13 @@ public class RezervareController {
 
     private final RezervareService rezervareService;
     private final MovieRepository movieRepository;
+    private final RezervareExporter rezervareExporter;
 
     public RezervareController(RezervareService rezervareService,
-                               MovieRepository movieRepository) {
+                               MovieRepository movieRepository, RezervareExporter rezervareExporter) {
         this.rezervareService = rezervareService;
         this.movieRepository = movieRepository;
+        this.rezervareExporter = rezervareExporter;
     }
 
     // ===================== DASHBOARD =====================
@@ -114,6 +120,36 @@ public class RezervareController {
         return "redirect:/afisareRezervari";
     }
 
+    @GetMapping("/salveazaFisier")
+    public void salveazaFisier(HttpServletResponse response) throws IOException {
+        List<Rezervare> rezervari = rezervareService.getAllRezervari();
+
+        response.setContentType("text/plain; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"rezervari.txt\"");
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        java.io.PrintWriter writer = response.getWriter();
+
+        writer.println("Salvare: " + java.time.LocalDateTime.now().format(dtf));
+        writer.println();
+
+        if (rezervari.isEmpty()) {
+            writer.println("Nu există rezervări.");
+        } else {
+            for (Rezervare r : rezervari) {
+                writer.println("Nume: " + r.getNume());
+                writer.println("Data rezervare: " + r.getDataRezervare().format(dateFormat));
+                writer.println("Film: " + r.getFilm());
+                writer.println("Sala: " + r.getNrSala());
+                writer.println("Locuri: " + r.getLocuri());
+                writer.println("---");
+            }
+        }
+
+        writer.flush();
+    }
     // ===================== HELPER METHODS =====================
     private List<String> getFilme() {
         return movieRepository.findAll()
