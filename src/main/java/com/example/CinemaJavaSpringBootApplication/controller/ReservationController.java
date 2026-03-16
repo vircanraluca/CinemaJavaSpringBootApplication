@@ -4,17 +4,20 @@ import com.example.CinemaJavaSpringBootApplication.export.ReservationExporter;
 import com.example.CinemaJavaSpringBootApplication.model.Movie;
 import com.example.CinemaJavaSpringBootApplication.model.Reservation;
 import com.example.CinemaJavaSpringBootApplication.repository.MovieRepository;
+import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
 import com.example.CinemaJavaSpringBootApplication.service.ReservationService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -23,13 +26,16 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final MovieRepository movieRepository;
     private final ReservationExporter reservationExporter;
+    private final ReservationRepository reservationRepository;
 
     public ReservationController(ReservationService reservationService,
                                  MovieRepository movieRepository,
-                                 ReservationExporter reservationExporter) {
+                                 ReservationExporter reservationExporter,
+                                 ReservationRepository reservationRepository) {
         this.reservationService = reservationService;
         this.movieRepository = movieRepository;
         this.reservationExporter = reservationExporter;
+        this.reservationRepository = reservationRepository;
     }
 
     @GetMapping("/dashboard")
@@ -80,15 +86,31 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public String showReservationsForm() {
+    public String showReservationsForm(Model model) {
+        model.addAttribute("halls", getHalls());
         return "reservations";
     }
 
     @PostMapping("/reservations")
-    public String showReservations(@RequestParam String name, Model model) {
-        List<Reservation> reservations = reservationService.getReservationsByName(name);
+    public String showReservations(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String movie,
+            @RequestParam(required = false) Integer hallNumber,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            Model model) {
+
+        String nameTrimmed = (name != null && !name.isBlank()) ? name : null;
+        String movieTrimmed = (movie != null && !movie.isBlank()) ? movie : null;
+
+        List<Reservation> reservations = reservationRepository.findByFilters(
+                nameTrimmed, movieTrimmed, hallNumber, date);
+
         model.addAttribute("reservations", reservations);
         model.addAttribute("name", name);
+        model.addAttribute("movie", movie);
+        model.addAttribute("hallNumber", hallNumber);
+        model.addAttribute("date", date);
+        model.addAttribute("halls", getHalls());
         return "reservations";
     }
 
