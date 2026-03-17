@@ -42,7 +42,7 @@
     </div>
 
     <div th:if="${availableSeats != null}" class="card">
-        <h3>Hall <span th:text="${hallNumber}"></span></h3>
+        <h3 style="color:white;">Hall <span th:text="${hallNumber}"></span></h3>
         <p>Available seats:
             <strong th:text="${availableSeats}"
                     th:class="${availableSeats == 0} ? 'text-danger' : 'text-success'">
