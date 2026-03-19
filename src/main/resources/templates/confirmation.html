@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,6 +19,7 @@
     <a th:href="@{/hallCapacity}">💺 Capacity</a>
     <a th:href="@{/saveFile}">💾 Save File</a>
     <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
+    <a th:href="@{/admin/statistics}" sec:authorize="hasRole('ROLE_ADMIN')">📊 Statistics</a>
     <a th:href="@{/logout}" class="logout">⏻ Logout</a>
   </div>
 </nav>
