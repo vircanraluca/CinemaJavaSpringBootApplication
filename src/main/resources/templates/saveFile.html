@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Save File - Cinema</title>
@@ -8,13 +9,15 @@
 </head>
 <body>
 
-<nav class="navbar">
+<!-- NAVBAR -->
+<nav class="navbar" sec:authorize="isAuthenticated()">
   <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
   <div class="navbar-links">
     <a th:href="@{/program}">📅 Schedule</a>
-    <a th:href="@{/reservations}" class="active">📋 Reservations</a>
+    <a th:href="@{/reservations}">📋 Reservations</a>
     <a th:href="@{/hallCapacity}">💺 Capacity</a>
     <a th:href="@{/saveFile}">💾 Save File</a>
+    <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
     <a th:href="@{/logout}" class="logout">⏻ Logout</a>
   </div>
 </nav>

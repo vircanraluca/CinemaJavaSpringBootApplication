@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Edit Movie</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e50914;
+      padding-bottom: 15px;
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #fff;
+    }
+
+    .page-header h1 span { color: #e50914; }
+
+    .back-link {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: #fff; }
+
+    .edit-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 30px;
+    }
+
+    .preview-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .poster-preview {
+      width: 80px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid #333;
+      background: #111;
+    }
+
+    .movie-meta h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .movie-meta span {
+      background: #2a2a2a;
+      color: #aaa;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .field-group label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #888;
+    }
+
+    .field-group input {
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #0f0f0f;
+      color: #fff;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    .field-group input:focus {
+      outline: none;
+      border-color: #e50914;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn-save {
+      flex: 1;
+      background: #e50914;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .btn-save:hover { background: #c0070f; }
+
+    .btn-cancel {
+      flex: 0 0 120px;
+      background: #2a2a2a;
+      color: #aaa;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-cancel:hover { background: #333; color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" sec:authorize="isAuthenticated()">
+  <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+  <div class="navbar-links">
+    <a th:href="@{/program}">📅 Schedule</a>
+    <a th:href="@{/reservations}">📋 Reservations</a>
+    <a th:href="@{/hallCapacity}">💺 Capacity</a>
+    <a th:href="@{/saveFile}">💾 Save File</a>
+    <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
+    <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>✏️ <span>Edit</span> Movie</h1>
+    <a th:href="@{/admin/movies}" class="back-link">← Back to list</a>
+  </div>
+
+  <div class="edit-card">
+
+    <!-- POSTER PREVIEW -->
+    <div class="preview-section">
+      <img id="posterPreview"
+           th:src="${movie.image != null && !movie.image.isEmpty()} ? ${movie.image} : 'https://via.placeholder.com/80x110?text=No+Image'"
+           alt="Poster"
+           class="poster-preview"/>
+      <div class="movie-meta">
+        <h2 th:text="${movie.title}">Movie Title</h2>
+        <span th:text="${movie.genre}">Genre</span>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <form th:action="@{/admin/movies/edit/{id}(id=${movie.id})}" method="post" th:object="${movie}">
+      <div class="form-grid">
+
+        <div class="field-group">
+          <label>Title *</label>
+          <input type="text" th:field="*{title}" placeholder="e.g. Inception" required/>
+        </div>
+
+        <div class="field-group">
+          <label>Genre</label>
+          <input type="text" th:field="*{genre}" placeholder="e.g. Action"/>
+        </div>
+
+        <div class="field-group">
+          <label>Year</label>
+          <input type="number" th:field="*{year}" placeholder="e.g. 2024"/>
+        </div>
+
+        <div class="field-group">
+          <label>Duration (minutes)</label>
+          <input type="number" th:field="*{duration}" placeholder="e.g. 120"/>
+        </div>
+
+        <div class="field-group full-width">
+          <label>Description</label>
+          <input type="text" th:field="*{description}" placeholder="Short description..."/>
+        </div>
+
+        <div class="field-group full-width">
+          <label>Image URL</label>
+          <input type="text" th:field="*{image}" placeholder="https://..." id="imageUrlInput"/>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-save">💾 Save Changes</button>
+        <a th:href="@{/admin/movies}" class="btn-cancel">✕ Cancel</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  // Live poster preview when URL changes
+  const input = document.getElementById('imageUrlInput');
+  const preview = document.getElementById('posterPreview');
+
+  input.addEventListener('input', function () {
+    const url = this.value.trim();
+    if (url) {
+      preview.src = url;
+      preview.onerror = () => preview.src = 'https://via.placeholder.com/80x110?text=No+Image';
+    }
+  });
+</script>
+
+</body>
+</html>

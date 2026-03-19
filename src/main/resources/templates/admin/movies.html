@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Admin - Movies</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e50914;
+      padding-bottom: 15px;
+    }
+
+    .page-header h1 {
+      color: #e50914;
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .back-link {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: #fff; }
+
+    /* ADD FORM */
+    .add-section {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 25px 30px;
+      margin-bottom: 40px;
+    }
+
+    .add-section h2 {
+      color: #e50914;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-grid input {
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #0f0f0f;
+      color: #fff;
+      font-size: 0.95rem;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .form-grid input:focus {
+      outline: none;
+      border-color: #e50914;
+    }
+
+    .form-grid .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .btn-add {
+      margin-top: 5px;
+      background: #e50914;
+      color: #fff;
+      padding: 11px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .btn-add:hover { background: #c0070f; }
+
+    /* TABLE */
+    .table-section h2 {
+      color: #e50914;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    thead tr {
+      background: #111;
+    }
+
+    th {
+      padding: 13px 16px;
+      text-align: left;
+      color: #e50914;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-top: 1px solid #2a2a2a;
+      font-size: 0.95rem;
+      color: #ddd;
+    }
+
+    tr:hover td { background: #222; }
+
+    .badge {
+      display: inline-block;
+      background: #2a2a2a;
+      color: #aaa;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+    .btn-edit { background: #f0a500; color: #000; }
+    .btn-delete { background: #e50914; color: #fff; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #555;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" sec:authorize="isAuthenticated()">
+  <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+  <div class="navbar-links">
+    <a th:href="@{/program}">📅 Schedule</a>
+    <a th:href="@{/reservations}">📋 Reservations</a>
+    <a th:href="@{/hallCapacity}">💺 Capacity</a>
+    <a th:href="@{/saveFile}">💾 Save File</a>
+    <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
+    <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>🎬 Admin — Manage Movies</h1>
+    <a th:href="@{/}" class="back-link">← Back to Home</a>
+  </div>
+
+  <!-- ADD MOVIE FORM -->
+  <div class="add-section">
+    <h2>➕ <span style="color:#fff;">Add</span> Movie</h2>
+    <form th:action="@{/admin/movies/add}" method="post" th:object="${newMovie}">
+      <div class="form-grid">
+        <input type="text"   th:field="*{title}"       placeholder="Title *" required/>
+        <input type="text"   th:field="*{genre}"       placeholder="Genre (e.g. Action)"/>
+        <input type="number" th:field="*{year}"        placeholder="Year (e.g. 2024)"/>
+        <input type="number" th:field="*{duration}"    placeholder="Duration (minutes)"/>
+        <input type="text"   th:field="*{description}" placeholder="Description" class="full-width"/>
+        <input type="text"   th:field="*{image}"       placeholder="Image URL" class="full-width"/>
+      </div>
+      <button type="submit" class="btn-add">✅ Add Movie</button>
+    </form>
+  </div>
+
+  <!-- MOVIES TABLE -->
+  <div class="table-section">
+    <h2>🎞️ <span style="color:#fff;">Existing</span> Movies</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Year</th>
+        <th>Duration</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${#lists.isEmpty(movies)}">
+        <td colspan="6" class="empty-state">No movies found. Add one above!</td>
+      </tr>
+      <tr th:each="m : ${movies}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.title}"></td>
+        <td><span class="badge" th:text="${m.genre}"></span></td>
+        <td th:text="${m.year}"></td>
+        <td th:text="${m.duration} + ' min'"></td>
+        <td>
+          <div class="actions">
+            <a th:href="@{/admin/movies/edit/{id}(id=${m.id})}">
+              <button class="btn btn-edit">✏️ Edit</button>
+            </a>
+            <form th:action="@{/admin/movies/delete/{id}(id=${m.id})}"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this movie?')">
+              <button class="btn btn-delete">🗑️ Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

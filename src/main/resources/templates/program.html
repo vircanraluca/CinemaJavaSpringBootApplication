@@ -10,13 +10,15 @@
 </head>
 <body>
 
-<nav class="navbar">
+<!-- NAVBAR -->
+<nav class="navbar" sec:authorize="isAuthenticated()">
     <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
     <div class="navbar-links">
-        <a th:href="@{/program}" class="active">📅 Schedule</a>
+        <a th:href="@{/program}">📅 Schedule</a>
         <a th:href="@{/reservations}">📋 Reservations</a>
         <a th:href="@{/hallCapacity}">💺 Capacity</a>
         <a th:href="@{/saveFile}">💾 Save File</a>
+        <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
