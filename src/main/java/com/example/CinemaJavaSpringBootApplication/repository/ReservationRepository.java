@@ -37,4 +37,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("movie") String movie,
             @Param("hallNumber") Integer hallNumber,
             @Param("date") LocalDate date);
+
+    List<Reservation> findByUsername(String username);
 }

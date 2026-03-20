@@ -19,19 +19,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Rute publice
-                        .requestMatchers("/","/login", "/register", "/").permitAll()
+                        .requestMatchers("/", "/login", "/register").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        // Doar ADMIN
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        // Restul necesită autentificare
+                        .requestMatchers("/admin/**", "/reservations", "/reservations/**", "/deleteReservation", "/saveFile").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/", true)  // ← schimbă din /dashboard în /
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -41,8 +38,13 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .permitAll()
                 )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/my-reservations");
+                        })
+                )
                 .headers(headers -> headers
-                        .frameOptions(frame -> frame.disable()) // pentru H2 console
+                        .frameOptions(frame -> frame.disable())
                 );
 
         return http.build();

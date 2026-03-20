@@ -2,6 +2,7 @@ package com.example.CinemaJavaSpringBootApplication.service;
 
 import com.example.CinemaJavaSpringBootApplication.model.Reservation;
 import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class ReservationServiceImplementation implements ReservationService {
         saveAndReturn(reservation);
     }
 
+
     @Override
     public Reservation saveAndReturn(Reservation reservation) {
         if (reservation.getReservationDate() == null) {
@@ -37,6 +39,12 @@ public class ReservationServiceImplementation implements ReservationService {
         if (occupiedSeats + reservation.getSeats() > capacity) {
             throw new IllegalStateException("Hall is full!");
         }
+
+        // Salveaza userul logat
+        String loggedUser = SecurityContextHolder.getContext()
+                .getAuthentication().getName();
+        reservation.setUsername(loggedUser);
+
         return reservationRepository.save(reservation);
     }
 
