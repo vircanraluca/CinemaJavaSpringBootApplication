@@ -2,6 +2,7 @@ package com.example.CinemaJavaSpringBootApplication.service;
 
 import com.example.CinemaJavaSpringBootApplication.model.Reservation;
 import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
+import com.example.CinemaJavaSpringBootApplication.service.HallService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -10,22 +11,30 @@ import java.util.List;
 @Service
 public class ReservationServiceImplementation implements ReservationService {
 
-    private static final int MAX_CAPACITY = 20;
-
     private final ReservationRepository reservationRepository;
+    private final HallService hallService;
 
-    public ReservationServiceImplementation(ReservationRepository reservationRepository) {
+    public ReservationServiceImplementation(ReservationRepository reservationRepository,
+                                            HallService hallService) {
         this.reservationRepository = reservationRepository;
+        this.hallService = hallService;
     }
 
     @Override
     public void addReservation(Reservation reservation) {
+        // Daca nu are data, foloseste data de azi
+        if (reservation.getReservationDate() == null) {
+            reservation.setReservationDate(LocalDate.now());
+        }
+
         if (reservation.getReservationDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Reservation date cannot be in the past!");
         }
 
-        int occupiedSeats = reservationRepository.getOccupiedSeats(reservation.getHallNumber());
-        if (occupiedSeats + reservation.getSeats() > MAX_CAPACITY) {
+        int capacity = hallService.getCapacity(reservation.getHallNumber());
+        int occupiedSeats = reservationRepository.getOccupiedSeatsByShowtime(reservation.getShowtimeId());
+
+        if (occupiedSeats + reservation.getSeats() > capacity) {
             throw new IllegalStateException("Hall is full!");
         }
 
@@ -39,8 +48,9 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public int getAvailableSeats(int hallNumber) {
+        int capacity = hallService.getCapacity(hallNumber);
         int occupiedSeats = reservationRepository.getOccupiedSeats(hallNumber);
-        return MAX_CAPACITY - occupiedSeats;
+        return capacity - occupiedSeats;
     }
 
     @Override

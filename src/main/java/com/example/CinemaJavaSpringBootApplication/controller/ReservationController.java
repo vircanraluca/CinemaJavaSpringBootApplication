@@ -5,6 +5,7 @@ import com.example.CinemaJavaSpringBootApplication.model.Movie;
 import com.example.CinemaJavaSpringBootApplication.model.Reservation;
 import com.example.CinemaJavaSpringBootApplication.repository.MovieRepository;
 import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
+import com.example.CinemaJavaSpringBootApplication.service.HallService;
 import com.example.CinemaJavaSpringBootApplication.service.ReservationService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,14 +29,18 @@ public class ReservationController {
     private final ReservationExporter reservationExporter;
     private final ReservationRepository reservationRepository;
 
+    private final HallService hallService;
+
     public ReservationController(ReservationService reservationService,
                                  MovieRepository movieRepository,
                                  ReservationExporter reservationExporter,
-                                 ReservationRepository reservationRepository) {
+                                 ReservationRepository reservationRepository,
+                                 HallService hallService) {
         this.reservationService = reservationService;
         this.movieRepository = movieRepository;
         this.reservationExporter = reservationExporter;
         this.reservationRepository = reservationRepository;
+        this.hallService = hallService;
     }
 
     @GetMapping("/dashboard")
@@ -58,7 +63,8 @@ public class ReservationController {
         try {
             reservationService.addReservation(reservation);
             return "redirect:/confirmation?movie=" + reservation.getMovie()
-                    + "&date=" + reservation.getReservationDate();
+                    + "&date=" + reservation.getReservationDate()
+                    + "&seat=" + reservation.getSeatLabel();
         } catch (IllegalArgumentException | IllegalStateException e) {
             try {
                 String errorEncoded = java.net.URLEncoder.encode(
@@ -67,6 +73,7 @@ public class ReservationController {
                         reservation.getMovie(), java.nio.charset.StandardCharsets.UTF_8);
                 return "redirect:/seats?movie=" + movieEncoded
                         + "&hallNumber=" + reservation.getHallNumber()
+                        + "&showtimeId=" + reservation.getShowtimeId()
                         + "&error=" + errorEncoded;
             } catch (Exception ex) {
                 return "redirect:/seats?movie=" + reservation.getMovie()
@@ -79,9 +86,11 @@ public class ReservationController {
     public String showConfirmation(
             @RequestParam String movie,
             @RequestParam String date,
+            @RequestParam(required = false) String seat,
             Model model) {
         model.addAttribute("movie", movie);
         model.addAttribute("date", date);
+        model.addAttribute("seat", seat);
         return "confirmation";
     }
 
@@ -123,7 +132,9 @@ public class ReservationController {
     @PostMapping("/hallCapacity")
     public String checkHallCapacity(@RequestParam int hallNumber, Model model) {
         int availableSeats = reservationService.getAvailableSeats(hallNumber);
+        int capacity = hallService.getCapacity(hallNumber);
         model.addAttribute("availableSeats", availableSeats);
+        model.addAttribute("capacity", capacity);
         model.addAttribute("hallNumber", hallNumber);
         model.addAttribute("halls", getHalls());
         return "hallCapacity";
@@ -159,6 +170,9 @@ public class ReservationController {
                 writer.println("Movie: " + r.getMovie());
                 writer.println("Hall: " + r.getHallNumber());
                 writer.println("Seats: " + r.getSeats());
+                if (r.getSeatLabel() != null) {
+                    writer.println("Seat: " + r.getSeatLabel());
+                }
                 writer.println("---");
             }
         }

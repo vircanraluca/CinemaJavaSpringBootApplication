@@ -17,6 +17,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT COALESCE(SUM(r.seats), 0) FROM Reservation r WHERE r.hallNumber = :hallNumber")
     int getOccupiedSeats(int hallNumber);
 
+    @Query("SELECT COALESCE(SUM(r.seats), 0) FROM Reservation r WHERE r.showtimeId = :showtimeId")
+    int getOccupiedSeatsByShowtime(@Param("showtimeId") Long showtimeId);
+
+    @Query("SELECT r.seatLabel FROM Reservation r WHERE r.showtimeId = :showtimeId AND r.seatLabel IS NOT NULL")
+    List<String> getOccupiedSeatLabelsByShowtime(@Param("showtimeId") Long showtimeId);
+
     List<Reservation> findByMovie(String movie);
     List<Reservation> findByReservationDate(LocalDate date);
     List<Reservation> findByMovieAndReservationDate(String movie, LocalDate date);

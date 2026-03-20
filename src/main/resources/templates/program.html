@@ -20,6 +20,7 @@
         <a th:href="@{/saveFile}">💾 Save File</a>
         <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
         <a th:href="@{/admin/statistics}" sec:authorize="hasRole('ROLE_ADMIN')">📊 Statistics</a>
+        <a th:href="@{/admin/halls}" sec:authorize="hasRole('ROLE_ADMIN')">🏛️ Manage Halls</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
 </nav>
@@ -77,7 +78,7 @@
                     <span th:text="${movie.year}"></span>
                 </div>
                 <div class="card-desc" th:text="${movie.description}"></div>
-                <a th:href="@{/seats(movie=${movie.title}, hallNumber=1, reservationDate=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')})}"
+                <a th:href="@{/seats(movie=${movie.title}, hallNumber=${movieShowtimes[movie.title] != null and !movieShowtimes[movie.title].empty ? movieShowtimes[movie.title][0].hallNumber : 1}, showtimeId=${movieShowtimes[movie.title] != null and !movieShowtimes[movie.title].empty ? movieShowtimes[movie.title][0].showtimeId : null})}"
                    class="btn-rezerva">🎟️ Reserve Now</a>
             </div>
         </div>

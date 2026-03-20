@@ -1,4 +1,5 @@
 DELETE FROM reservations;
+DELETE FROM hall_showtimes;
 DELETE FROM user_roles;
 DELETE FROM users;
 DELETE FROM movies;
@@ -23,7 +24,19 @@ INSERT INTO users (id, email, password, username) VALUES
 INSERT INTO user_roles (user_id, role) VALUES
 (1, 'ROLE_ADMIN');
 
-INSERT INTO reservations (id, hall_number, movie, name, reservation_date, seats) VALUES
-(1, 1, 'The Dark Knight', 'Raluca Vircan', '2026-03-16', 1),
-(2, 2, 'Gladiator', 'Florentina Geanina', '2026-03-17', 1),
-(3, 1, 'The Dark Knight', 'Melinda Zaria', '2026-03-17', 1);
+INSERT INTO hall_showtimes (id, hall_number, movie, show_date, show_time) VALUES
+(1, 1, 'The Dark Knight', '2026-03-25', '16:00'),
+(2, 1, 'The Dark Knight', '2026-03-25', '18:00'),
+(3, 1, 'The Dark Knight', '2026-03-25', '20:00'),
+(4, 1, 'Inception', '2026-03-26', '17:00'),
+(5, 1, 'Inception', '2026-03-26', '20:00'),
+(6, 2, 'Gladiator', '2026-03-25', '16:00'),
+(7, 2, 'Gladiator', '2026-03-25', '19:00'),
+(8, 2, 'Interstellar', '2026-03-26', '18:00'),
+(9, 3, 'The Matrix', '2026-03-25', '17:00'),
+(10, 3, 'The Matrix', '2026-03-26', '20:00');
+
+INSERT INTO reservations (id, hall_number, movie, name, reservation_date, seats, showtime_id, seat_label) VALUES
+(1, 1, 'The Dark Knight', 'Raluca Vircan', '2026-03-25', 1, 1, 'A1'),
+(2, 2, 'Gladiator', 'Florentina Geanina', '2026-03-25', 1, 6, 'A2'),
+(3, 1, 'The Dark Knight', 'Melinda Zaria', '2026-03-25', 1, 1, 'A3');

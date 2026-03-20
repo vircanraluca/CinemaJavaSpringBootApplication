@@ -20,6 +20,7 @@
     <a th:href="@{/saveFile}">💾 Save File</a>
     <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
     <a th:href="@{/admin/statistics}" sec:authorize="hasRole('ROLE_ADMIN')">📊 Statistics</a>
+    <a th:href="@{/admin/halls}" sec:authorize="hasRole('ROLE_ADMIN')">🏛️ Manage Halls</a>
     <a th:href="@{/logout}" class="logout">⏻ Logout</a>
   </div>
 </nav>

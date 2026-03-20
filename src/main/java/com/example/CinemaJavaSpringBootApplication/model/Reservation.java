@@ -26,15 +26,13 @@ public class Reservation {
     @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
 
-    public Reservation() {}
+    @Column(name = "showtime_id")
+    private Long showtimeId;
 
-    public Reservation(String movie, Integer hallNumber, String name, Integer seats, LocalDate reservationDate) {
-        this.movie = movie;
-        this.hallNumber = hallNumber;
-        this.name = name;
-        this.seats = seats;
-        this.reservationDate = reservationDate;
-    }
+    @Column(name = "seat_label")
+    private String seatLabel;
+
+    public Reservation() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -53,4 +51,10 @@ public class Reservation {
 
     public LocalDate getReservationDate() { return reservationDate; }
     public void setReservationDate(LocalDate reservationDate) { this.reservationDate = reservationDate; }
+
+    public Long getShowtimeId() { return showtimeId; }
+    public void setShowtimeId(Long showtimeId) { this.showtimeId = showtimeId; }
+
+    public String getSeatLabel() { return seatLabel; }
+    public void setSeatLabel(String seatLabel) { this.seatLabel = seatLabel; }
 }

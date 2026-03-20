@@ -28,6 +28,7 @@
         <a th:href="@{/hallCapacity}">💺 Capacity</a>
         <a th:href="@{/saveFile}">💾 Save File</a>
         <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
+        <a th:href="@{/admin/halls}" sec:authorize="hasRole('ROLE_ADMIN')">🏛️ Manage Halls</a>
         <a th:href="@{/admin/statistics}" sec:authorize="hasRole('ROLE_ADMIN')">📊 Statistics</a>
         <a th:href="@{/logout}" class="logout">⏻ Logout</a>
     </div>
@@ -38,18 +39,14 @@
     <div class="movie-info">
         <h1 th:text="${movie}">Movie name</h1>
         <div class="sala-selector">
-            <label>🏛️ Select hall:</label>
-            <select id="salaSelect">
-                <option value="">-- Select Hall --</option>
-                <option value="1">Hall 1</option>
-                <option value="2">Hall 2</option>
-                <option value="3">Hall 3</option>
-                <option value="4">Hall 4</option>
-                <option value="5">Hall 5</option>
-                <option value="6">Hall 6</option>
-                <option value="7">Hall 7</option>
-                <option value="8">Hall 8</option>
-                <option value="9">Hall 9</option>
+            <label>🕐 Select show time:</label>
+            <select id="showtimeSelect">
+                <option value="">-- Select Time --</option>
+                <option th:each="st : ${showtimes}"
+                        th:value="${st.id}"
+                        th:attr="data-hall=${st.hallNumber}"
+                        th:text="${st.showTime} + ' — Hall ' + ${st.hallNumber}">
+                </option>
             </select>
             <span id="salaInfo"></span>
         </div>
@@ -93,9 +90,11 @@
 
     <div class="confirm-panel" id="confirmPanel">
         <form th:action="@{/reservation}" method="post">
-            <input type="hidden" name="movie" th:value="${movie}"/>
-            <input type="hidden" name="seats" id="seatsInput" value="1"/>
+            <input type="hidden" name="movie"      th:value="${movie}"/>
             <input type="hidden" name="hallNumber" id="hallNumberHidden" value=""/>
+            <input type="hidden" name="showtimeId" id="showtimeIdInput" value=""/>
+            <input type="hidden" name="seats"      value="1"/>
+            <input type="hidden" name="seatLabel"  id="seatLabelInput" value=""/>
 
             <div class="confirm-header">
                 <h3>🎟️ Complete Your Reservation</h3>
@@ -111,18 +110,19 @@
                     <input type="text" name="name" placeholder="e.g. John Smith"
                            required autocomplete="off"/>
                 </div>
-
                 <div class="confirm-row">
                     <div class="field-group">
-                        <label><span class="field-icon">🏛️</span>Selected Hall</label>
-                        <input type="text" id="hallDisplay" readonly
-                               placeholder="Select a hall above"/>
+                        <label><span class="field-icon">🏛️</span>Hall</label>
+                        <input type="text" id="hallDisplay" readonly placeholder="Select a time above"/>
                     </div>
-
                     <div class="field-group">
-                        <label><span class="field-icon">📅</span>Reservation Date</label>
-                        <input type="date" name="reservationDate" required/>
+                        <label><span class="field-icon">🕐</span>Show Time</label>
+                        <input type="text" id="showTimeDisplay" readonly placeholder="Select a time above"/>
                     </div>
+                </div>
+                <div class="field-group">
+                    <label><span class="field-icon">📅</span>Reservation Date</label>
+                    <input type="date" name="reservationDate" required/>
                 </div>
             </div>
 
@@ -143,9 +143,9 @@
     }
 
     function seatClickHandler() {
-        const hallNumber = document.getElementById('salaSelect').value;
-        if (!hallNumber) {
-            alert('Please select a hall first!');
+        const showtimeId = document.getElementById('showtimeSelect').value;
+        if (!showtimeId) {
+            alert('Please select a show time first!');
             return;
         }
 
@@ -158,43 +158,41 @@
         this.classList.add('selected');
 
         const seatId = this.getAttribute('data-seat');
-        const hallText = document.getElementById('salaSelect').options[
-            document.getElementById('salaSelect').selectedIndex
-        ].text;
-
         document.getElementById('selectedSeatLabel').textContent = seatId;
-        document.getElementById('hallNumberHidden').value = hallNumber;
-        document.getElementById('hallDisplay').value = hallText;
+        document.getElementById('seatLabelInput').value = seatId;
         document.getElementById('confirmPanel').classList.add('visible');
     }
 
-    document.getElementById('salaSelect').addEventListener('change', function() {
-        const hallNumber = this.value;
-        if (!hallNumber) return;
+    document.getElementById('showtimeSelect').addEventListener('change', function() {
+        const showtimeId = this.value;
+        if (!showtimeId) return;
 
-        const hallText = this.options[this.selectedIndex].text;
+        const hallNumber = this.options[this.selectedIndex].getAttribute('data-hall');
+        const showTime = this.options[this.selectedIndex].text.split(' — ')[0];
 
-        fetch(`/seats/occupied?hallNumber=${hallNumber}`)
+        fetch(`/seats/occupied?showtimeId=${showtimeId}`)
             .then(res => res.json())
             .then(data => {
-                const occupiedSeats = data.occupiedSeats;
+                const occupiedLabels = data.occupiedLabels;
                 const seats = document.querySelectorAll('.cinema-hall .seat');
 
-                seats.forEach((seat, index) => {
+                seats.forEach(seat => {
                     seat.classList.remove('occupied', 'available', 'selected');
-                    if (index < occupiedSeats) {
+                    const seatId = seat.getAttribute('data-seat');
+                    if (occupiedLabels.includes(seatId)) {
                         seat.classList.add('occupied');
                     } else {
                         seat.classList.add('available');
                     }
                 });
 
-                document.getElementById('salaInfo').textContent =
-                    `${20 - occupiedSeats} seats available`;
+                document.getElementById('hallNumberHidden').value = hallNumber;
+                document.getElementById('showtimeIdInput').value = showtimeId;
+                document.getElementById('hallDisplay').value = 'Hall ' + hallNumber;
+                document.getElementById('showTimeDisplay').value = showTime;
                 document.getElementById('selectedSeatLabel').textContent = '-';
-                document.getElementById('hallDisplay').value = hallText;
+                document.getElementById('seatLabelInput').value = '';
                 document.getElementById('confirmPanel').classList.remove('visible');
-                document.getElementById('hallNumberHidden').value = '';
 
                 addEventListeners();
             });
