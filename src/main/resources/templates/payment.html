@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Payment</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f0f0f; color: #fff; margin: 0; }
+    .page-wrapper { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+
+    .payment-card {
+        background: #1a1a1a; border: 1px solid #2a2a2a;
+        border-radius: 12px; padding: 30px;
+    }
+
+    .payment-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 24px; color: #fff; }
+    .payment-title span { color: #e50914; }
+
+    .summary-box { background: #111; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+    .summary-row {
+        display: flex; justify-content: space-between;
+        padding: 6px 0; font-size: 0.9rem; color: #aaa;
+        border-bottom: 1px solid #222;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row strong { color: #fff; }
+
+    .section-title {
+        font-size: 0.75rem; text-transform: uppercase;
+        letter-spacing: 0.05em; color: #666; margin-bottom: 12px;
+    }
+
+    .ticket-selector { display: flex; gap: 12px; margin-bottom: 24px; }
+    .ticket-btn {
+        flex: 1; padding: 16px; border-radius: 8px;
+        border: 2px solid #333; background: #111;
+        color: #aaa; cursor: pointer; text-align: center; transition: all 0.2s;
+    }
+    .ticket-btn.selected { border-color: #e50914; background: rgba(229,9,20,0.1); color: #fff; }
+    .ticket-btn .ticket-name { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
+    .ticket-btn .ticket-desc { font-size: 0.78rem; color: #666; margin-bottom: 8px; }
+    .ticket-btn.selected .ticket-desc { color: #aaa; }
+    .ticket-btn .ticket-price { font-size: 1.1rem; font-weight: bold; color: #e50914; }
+
+    .price-display {
+        text-align: center; margin-bottom: 24px;
+        padding: 16px; background: #111; border-radius: 8px;
+        border: 1px solid #2a2a2a;
+    }
+    .price-label { font-size: 0.78rem; color: #666; text-transform: uppercase; margin-bottom: 4px; }
+    .price-value { font-size: 2.2rem; font-weight: bold; color: #e50914; }
+    .price-value span { font-size: 1rem; color: #aaa; margin-left: 4px; }
+    .weekend-notice { font-size: 0.75rem; color: #888; margin-top: 4px; }
+
+    .field-group { margin-bottom: 14px; }
+    .field-group label {
+        display: block; font-size: 0.75rem; text-transform: uppercase;
+        letter-spacing: 0.05em; color: #666; margin-bottom: 5px;
+    }
+    .field-group input {
+        width: 100%; padding: 10px 12px; border-radius: 6px;
+        border: 1px solid #333; background: #0f0f0f; color: #fff;
+        font-size: 0.95rem; box-sizing: border-box; transition: border-color 0.2s;
+    }
+    .field-group input:focus { outline: none; border-color: #e50914; }
+    .field-group input.error { border-color: #e50914; }
+    .field-error { color: #e50914; font-size: 0.75rem; margin-top: 4px; display: none; }
+
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn-pay {
+        width: 100%; background: #e50914; color: #fff;
+        padding: 14px; border: none; border-radius: 8px;
+        font-size: 1rem; font-weight: bold; cursor: pointer;
+        margin-top: 8px; transition: background 0.2s;
+    }
+    .btn-pay:hover { background: #c0070f; }
+
+    .secure-badge { text-align: center; margin-top: 12px; font-size: 0.78rem; color: #555; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" sec:authorize="isAuthenticated()">
+  <a th:href="@{/}" class="navbar-brand">🎬 <span>Cinema</span> App</a>
+  <div class="navbar-links">
+    <a th:href="@{/program}">📅 Schedule</a>
+    <a th:href="@{/reservations}">📋 Reservations</a>
+    <a th:href="@{/hallCapacity}">💺 Capacity</a>
+    <a th:href="@{/saveFile}">💾 Save File</a>
+    <a th:href="@{/admin/movies}" sec:authorize="hasRole('ROLE_ADMIN')">🎬 Manage Movies</a>
+    <a th:href="@{/admin/halls}" sec:authorize="hasRole('ROLE_ADMIN')">🏛️ Manage Halls</a>
+    <a th:href="@{/admin/statistics}" sec:authorize="hasRole('ROLE_ADMIN')">📊 Statistics</a>
+    <a th:href="@{/logout}" class="logout">⏻ Logout</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <div class="payment-card">
+
+    <div class="payment-title">💳 <span>Complete</span> Payment</div>
+
+    <!-- Rezumat rezervare -->
+    <div class="section-title">📋 Reservation Summary</div>
+    <div class="summary-box">
+      <div class="summary-row">
+        <span>🎬 Movie</span>
+        <strong th:text="${reservation.movie}"></strong>
+      </div>
+      <div class="summary-row">
+        <span>💺 Seat</span>
+        <strong th:text="${reservation.seatLabel}"></strong>
+      </div>
+      <div class="summary-row">
+        <span>🏛️ Hall</span>
+        <strong th:text="'Hall ' + ${reservation.hallNumber}"></strong>
+      </div>
+      <div class="summary-row">
+        <span>📅 Date</span>
+        <strong th:text="${reservation.reservationDate}"></strong>
+      </div>
+      <div class="summary-row">
+        <span>👤 Name</span>
+        <strong th:text="${reservation.name}"></strong>
+      </div>
+    </div>
+
+    <!-- Selectie tip bilet -->
+    <div class="section-title">🎟️ Select Ticket Type</div>
+    <div class="ticket-selector">
+      <div class="ticket-btn selected" id="btn-standard" onclick="selectTicket('STANDARD')">
+        <div class="ticket-name">🎟️ Standard</div>
+        <div class="ticket-desc">Regular seat</div>
+        <div class="ticket-price" id="price-standard">35 RON</div>
+      </div>
+      <div class="ticket-btn" id="btn-vip" onclick="selectTicket('VIP')">
+        <div class="ticket-name">⭐ VIP</div>
+        <div class="ticket-desc">Premium seat</div>
+        <div class="ticket-price" id="price-vip">55 RON</div>
+      </div>
+    </div>
+
+    <!-- Pret total -->
+    <div class="price-display">
+      <div class="price-label">Total Amount</div>
+      <div class="price-value" id="totalPrice">35 <span>RON</span></div>
+      <div class="weekend-notice" id="weekendNotice" style="display:none">
+        🗓️ Weekend surcharge (+10 RON) applied
+      </div>
+    </div>
+
+    <!-- Formular card -->
+    <form th:action="@{/payment/{id}(id=${reservation.id})}" method="post">
+      <input type="hidden" name="ticketType" id="ticketTypeInput" value="STANDARD"/>
+
+      <div class="section-title">💳 Card Details</div>
+
+      <div class="field-group">
+        <label>Card Number</label>
+        <input type="text" id="cardNumber" name="cardNumber"
+               placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="off"/>
+        <div class="field-error" id="cardNumberError">Please enter a valid 16-digit card number.</div>
+      </div>
+
+      <div class="field-group">
+        <label>Card Holder Name</label>
+        <input type="text" id="cardHolder" name="cardHolder"
+               placeholder="JOHN SMITH" autocomplete="off"/>
+        <div class="field-error" id="cardHolderError">Please enter the card holder name.</div>
+      </div>
+
+      <div class="card-row">
+        <div class="field-group">
+          <label>Expiry Date</label>
+          <input type="text" id="expiry" name="expiry"
+                 placeholder="MM/YY" maxlength="5" autocomplete="off"/>
+          <div class="field-error" id="expiryError">Invalid expiry date.</div>
+        </div>
+        <div class="field-group">
+          <label>CVV</label>
+          <input type="text" id="cvv" name="cvv"
+                 placeholder="123" maxlength="3" autocomplete="off"/>
+          <div class="field-error" id="cvvError">CVV must be 3 digits.</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-pay" onclick="return validateForm()">
+        🔒 Pay <span id="payBtnAmount">35</span> RON
+      </button>
+    </form>
+
+    <div class="secure-badge">🔒 Secure simulated payment — no real charges</div>
+
+  </div>
+</div>
+
+<script th:inline="javascript">
+  const dayOfWeek = /*[[${#temporals.format(reservation.reservationDate, 'EEEE')}]]*/ '';
+  const weekend = (dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday');
+
+  const prices = {
+      STANDARD: weekend ? 45 : 35,
+      VIP: weekend ? 65 : 55
+  };
+
+  // Seteaza preturile corecte la incarcare
+  document.getElementById('price-standard').textContent = prices.STANDARD + ' RON';
+  document.getElementById('price-vip').textContent = prices.VIP + ' RON';
+  document.getElementById('totalPrice').innerHTML = prices.STANDARD + ' <span>RON</span>';
+  document.getElementById('payBtnAmount').textContent = prices.STANDARD;
+
+  if (weekend) {
+      document.getElementById('weekendNotice').style.display = 'block';
+  }
+
+  function selectTicket(type) {
+      document.getElementById('btn-standard').classList.toggle('selected', type === 'STANDARD');
+      document.getElementById('btn-vip').classList.toggle('selected', type === 'VIP');
+      document.getElementById('ticketTypeInput').value = type;
+      document.getElementById('totalPrice').innerHTML = prices[type] + ' <span>RON</span>';
+      document.getElementById('payBtnAmount').textContent = prices[type];
+  }
+
+  // Format card number cu spatii
+  document.getElementById('cardNumber').addEventListener('input', function() {
+      let val = this.value.replace(/\D/g, '').substring(0, 16);
+      this.value = val.replace(/(.{4})/g, '$1 ').trim();
+  });
+
+  // Format expiry MM/YY
+  document.getElementById('expiry').addEventListener('input', function() {
+      let val = this.value.replace(/\D/g, '').substring(0, 4);
+      if (val.length >= 2) val = val.substring(0, 2) + '/' + val.substring(2);
+      this.value = val;
+  });
+
+  // Doar cifre CVV
+  document.getElementById('cvv').addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '').substring(0, 3);
+  });
+
+  function validateForm() {
+      let valid = true;
+
+      const cardNum = document.getElementById('cardNumber').value.replace(/\s/g, '');
+      if (cardNum.length !== 16) {
+          document.getElementById('cardNumberError').style.display = 'block';
+          document.getElementById('cardNumber').classList.add('error');
+          valid = false;
+      } else {
+          document.getElementById('cardNumberError').style.display = 'none';
+          document.getElementById('cardNumber').classList.remove('error');
+      }
+
+      const holder = document.getElementById('cardHolder').value.trim();
+      if (holder.length < 3) {
+          document.getElementById('cardHolderError').style.display = 'block';
+          document.getElementById('cardHolder').classList.add('error');
+          valid = false;
+      } else {
+          document.getElementById('cardHolderError').style.display = 'none';
+          document.getElementById('cardHolder').classList.remove('error');
+      }
+
+      const expiry = document.getElementById('expiry').value;
+      if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+          document.getElementById('expiryError').style.display = 'block';
+          document.getElementById('expiry').classList.add('error');
+          valid = false;
+      } else {
+          document.getElementById('expiryError').style.display = 'none';
+          document.getElementById('expiry').classList.remove('error');
+      }
+
+      const cvv = document.getElementById('cvv').value;
+      if (cvv.length !== 3) {
+          document.getElementById('cvvError').style.display = 'block';
+          document.getElementById('cvv').classList.add('error');
+          valid = false;
+      } else {
+          document.getElementById('cvvError').style.display = 'none';
+          document.getElementById('cvv').classList.remove('error');
+      }
+
+      return valid;
+  }
+</script>
+
+</body>
+</html>

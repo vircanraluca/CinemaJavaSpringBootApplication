@@ -2,7 +2,6 @@ package com.example.CinemaJavaSpringBootApplication.service;
 
 import com.example.CinemaJavaSpringBootApplication.model.Reservation;
 import com.example.CinemaJavaSpringBootApplication.repository.ReservationRepository;
-import com.example.CinemaJavaSpringBootApplication.service.HallService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,23 +21,23 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public void addReservation(Reservation reservation) {
-        // Daca nu are data, foloseste data de azi
+        saveAndReturn(reservation);
+    }
+
+    @Override
+    public Reservation saveAndReturn(Reservation reservation) {
         if (reservation.getReservationDate() == null) {
             reservation.setReservationDate(LocalDate.now());
         }
-
         if (reservation.getReservationDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Reservation date cannot be in the past!");
         }
-
         int capacity = hallService.getCapacity(reservation.getHallNumber());
         int occupiedSeats = reservationRepository.getOccupiedSeatsByShowtime(reservation.getShowtimeId());
-
         if (occupiedSeats + reservation.getSeats() > capacity) {
             throw new IllegalStateException("Hall is full!");
         }
-
-        reservationRepository.save(reservation);
+        return reservationRepository.save(reservation);
     }
 
     @Override

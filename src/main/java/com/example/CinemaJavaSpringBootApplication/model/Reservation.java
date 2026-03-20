@@ -32,6 +32,15 @@ public class Reservation {
     @Column(name = "seat_label")
     private String seatLabel;
 
+    @Column(name = "ticket_type")
+    private String ticketType; // "STANDARD" sau "VIP"
+
+    @Column(name = "price")
+    private Double price;
+
+    @Column(name = "paid")
+    private Boolean paid = false;
+
     public Reservation() {}
 
     public Long getId() { return id; }
@@ -57,4 +66,13 @@ public class Reservation {
 
     public String getSeatLabel() { return seatLabel; }
     public void setSeatLabel(String seatLabel) { this.seatLabel = seatLabel; }
+
+    public String getTicketType() { return ticketType; }
+    public void setTicketType(String ticketType) { this.ticketType = ticketType; }
+
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
+
+    public Boolean getPaid() { return paid; }
+    public void setPaid(Boolean paid) { this.paid = paid; }
 }

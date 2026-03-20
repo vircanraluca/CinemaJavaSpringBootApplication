@@ -1,12 +1,13 @@
 package com.example.CinemaJavaSpringBootApplication.service;
 
 import com.example.CinemaJavaSpringBootApplication.model.Reservation;
-
 import java.util.List;
 
 public interface ReservationService {
 
     void addReservation(Reservation reservation);
+
+    Reservation saveAndReturn(Reservation reservation);
 
     List<Reservation> getReservationsByName(String name);
 

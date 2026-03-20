@@ -62,9 +62,17 @@ public class ReservationController {
     public String addReservation(@ModelAttribute Reservation reservation, Model model) {
         try {
             reservationService.addReservation(reservation);
-            return "redirect:/confirmation?movie=" + reservation.getMovie()
-                    + "&date=" + reservation.getReservationDate()
-                    + "&seat=" + reservation.getSeatLabel();
+            // Redirect la plata in loc de confirmation
+            return "redirect:/payment/" + reservationRepository
+                    .findAll()
+                    .stream()
+                    .filter(r -> r.getSeatLabel() != null &&
+                            r.getSeatLabel().equals(reservation.getSeatLabel()) &&
+                            r.getShowtimeId() != null &&
+                            r.getShowtimeId().equals(reservation.getShowtimeId()))
+                    .mapToLong(r -> r.getId())
+                    .max()
+                    .orElseThrow();
         } catch (IllegalArgumentException | IllegalStateException e) {
             try {
                 String errorEncoded = java.net.URLEncoder.encode(
@@ -72,12 +80,10 @@ public class ReservationController {
                 String movieEncoded = java.net.URLEncoder.encode(
                         reservation.getMovie(), java.nio.charset.StandardCharsets.UTF_8);
                 return "redirect:/seats?movie=" + movieEncoded
-                        + "&hallNumber=" + reservation.getHallNumber()
                         + "&showtimeId=" + reservation.getShowtimeId()
                         + "&error=" + errorEncoded;
             } catch (Exception ex) {
-                return "redirect:/seats?movie=" + reservation.getMovie()
-                        + "&hallNumber=" + reservation.getHallNumber() + "&error=Error";
+                return "redirect:/seats?movie=" + reservation.getMovie() + "&error=Error";
             }
         }
     }
