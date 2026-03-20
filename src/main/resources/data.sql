@@ -19,24 +19,75 @@ INSERT INTO movies (id, title, description, image_url, duration_minutes, genre_t
 (12, 'Joker', 'A mentally troubled stand-up comedian embarks on a downward spiral that leads to the creation of an iconic villain.', 'https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg', 122, 'Drama', 2019);
 
 INSERT INTO users (id, email, password, username) VALUES
-(1, 'admin@gmail.com', '$2a$10$DXNRkgZwIJACfJAn7ZGT0.gbR6BS8u2tNwJNiFFJZqHPrTFpoMRbi', 'personalCinematograf');
+(1, 'admin@gmail.com', '$2a$10$DXNRkgZwIJACfJAn7ZGT0.gbR6BS8u2tNwJNiFFJZqHPrTFpoMRbi', 'personalCinematograf'),
+(2, 'raluca@gmail.com', '$2a$10$DXNRkgZwIJACfJAn7ZGT0.gbR6BS8u2tNwJNiFFJZqHPrTFpoMRbi', 'raluca10'),
+(3, 'andrei@gmail.com', '$2a$10$DXNRkgZwIJACfJAn7ZGT0.gbR6BS8u2tNwJNiFFJZqHPrTFpoMRbi', 'andrei99'),
+(4, 'maria@gmail.com', '$2a$10$DXNRkgZwIJACfJAn7ZGT0.gbR6BS8u2tNwJNiFFJZqHPrTFpoMRbi', 'maria_m');
 
 INSERT INTO user_roles (user_id, role) VALUES
-(1, 'ROLE_ADMIN');
+(1, 'ROLE_ADMIN'),
+(2, 'ROLE_USER'),
+(3, 'ROLE_USER'),
+(4, 'ROLE_USER');
 
 INSERT INTO hall_showtimes (id, hall_number, movie, show_date, show_time) VALUES
-(1, 1, 'The Dark Knight', '2026-03-25', '16:00'),
-(2, 1, 'The Dark Knight', '2026-03-25', '18:00'),
-(3, 1, 'The Dark Knight', '2026-03-25', '20:00'),
-(4, 1, 'Inception', '2026-03-26', '17:00'),
-(5, 1, 'Inception', '2026-03-26', '20:00'),
-(6, 2, 'Gladiator', '2026-03-25', '16:00'),
-(7, 2, 'Gladiator', '2026-03-25', '19:00'),
-(8, 2, 'Interstellar', '2026-03-26', '18:00'),
-(9, 3, 'The Matrix', '2026-03-25', '17:00'),
-(10, 3, 'The Matrix', '2026-03-26', '20:00');
+(1,  1, 'The Dark Knight', '2026-03-25', '16:00'),
+(2,  1, 'The Dark Knight', '2026-03-25', '18:00'),
+(3,  1, 'The Dark Knight', '2026-03-25', '20:00'),
+(4,  1, 'The Dark Knight', '2026-03-25', '22:00'),
+(5,  1, 'Inception',       '2026-03-26', '16:00'),
+(6,  1, 'Inception',       '2026-03-26', '18:00'),
+(7,  1, 'Inception',       '2026-03-26', '20:00'),
+(8,  1, 'Inception',       '2026-03-26', '22:00'),
+(9,  2, 'Gladiator',       '2026-03-25', '16:00'),
+(10, 2, 'Gladiator',       '2026-03-25', '18:00'),
+(11, 2, 'Gladiator',       '2026-03-25', '20:00'),
+(12, 2, 'Gladiator',       '2026-03-25', '22:00'),
+(13, 2, 'Interstellar',    '2026-03-26', '16:00'),
+(14, 2, 'Interstellar',    '2026-03-26', '18:00'),
+(15, 2, 'Interstellar',    '2026-03-26', '20:00'),
+(16, 2, 'Interstellar',    '2026-03-26', '22:00'),
+(17, 3, 'The Matrix',      '2026-03-25', '16:00'),
+(18, 3, 'The Matrix',      '2026-03-25', '18:00'),
+(19, 3, 'The Matrix',      '2026-03-25', '20:00'),
+(20, 3, 'The Matrix',      '2026-03-25', '22:00'),
+(21, 3, 'Pulp Fiction',    '2026-03-26', '16:00'),
+(22, 3, 'Pulp Fiction',    '2026-03-26', '18:00'),
+(23, 3, 'Pulp Fiction',    '2026-03-26', '20:00'),
+(24, 3, 'Pulp Fiction',    '2026-03-26', '22:00'),
+(25, 4, 'The Godfather',   '2026-03-25', '16:00'),
+(26, 4, 'The Godfather',   '2026-03-25', '18:00'),
+(27, 4, 'The Godfather',   '2026-03-25', '20:00'),
+(28, 4, 'The Godfather',   '2026-03-25', '22:00'),
+(29, 4, 'Forrest Gump',    '2026-03-26', '16:00'),
+(30, 4, 'Forrest Gump',    '2026-03-26', '18:00'),
+(31, 4, 'Forrest Gump',    '2026-03-26', '20:00'),
+(32, 4, 'Forrest Gump',    '2026-03-26', '22:00'),
+(33, 5, 'Joker',           '2026-03-25', '16:00'),
+(34, 5, 'Joker',           '2026-03-25', '18:00'),
+(35, 5, 'Joker',           '2026-03-25', '20:00'),
+(36, 5, 'Joker',           '2026-03-25', '22:00'),
+(37, 5, 'Titanic',         '2026-03-26', '16:00'),
+(38, 5, 'Titanic',         '2026-03-26', '18:00'),
+(39, 5, 'Titanic',         '2026-03-26', '20:00'),
+(40, 5, 'Titanic',         '2026-03-26', '22:00'),
+(41, 6, 'The Shawshank Redemption', '2026-03-25', '16:00'),
+(42, 6, 'The Shawshank Redemption', '2026-03-25', '18:00'),
+(43, 6, 'The Shawshank Redemption', '2026-03-25', '20:00'),
+(44, 6, 'The Shawshank Redemption', '2026-03-25', '22:00'),
+(45, 6, 'The Lion King',   '2026-03-26', '16:00'),
+(46, 6, 'The Lion King',   '2026-03-26', '18:00'),
+(47, 6, 'The Lion King',   '2026-03-26', '20:00'),
+(48, 6, 'The Lion King',   '2026-03-26', '22:00');
 
-INSERT INTO reservations (id, hall_number, movie, name, reservation_date, seats, showtime_id, seat_label) VALUES
-(1, 1, 'The Dark Knight', 'Raluca Vircan', '2026-03-25', 1, 1, 'A1'),
-(2, 2, 'Gladiator', 'Florentina Geanina', '2026-03-25', 1, 6, 'A2'),
-(3, 1, 'The Dark Knight', 'Melinda Zaria', '2026-03-25', 1, 1, 'A3');
+INSERT INTO reservations (id, hall_number, movie, name, reservation_date, seats, showtime_id, seat_label, ticket_type, price, paid, username) VALUES
+(1,  1, 'The Dark Knight', 'Raluca Vircan',    '2026-03-25', 1, 1,  'A1', 'STANDARD', 35.0, TRUE, 'raluca10'),
+(2,  1, 'The Dark Knight', 'Raluca Vircan',    '2026-03-25', 1, 1,  'B2', 'VIP',      55.0, TRUE, 'raluca10'),
+(3,  2, 'Gladiator',       'Andrei Pop',       '2026-03-25', 1, 9,  'A2', 'STANDARD', 35.0, TRUE, 'andrei99'),
+(4,  2, 'Gladiator',       'Maria Ionescu',    '2026-03-25', 1, 9,  'C3', 'VIP',      55.0, TRUE, 'maria_m'),
+(5,  1, 'The Dark Knight', 'Andrei Pop',       '2026-03-25', 1, 2,  'A4', 'STANDARD', 35.0, TRUE, 'andrei99'),
+(6,  3, 'The Matrix',      'Maria Ionescu',    '2026-03-25', 1, 17, 'B1', 'STANDARD', 35.0, TRUE, 'maria_m'),
+(7,  4, 'The Godfather',   'Raluca Vircan',    '2026-03-25', 1, 25, 'A3', 'VIP',      55.0, TRUE, 'raluca10'),
+(8,  5, 'Joker',           'Andrei Pop',       '2026-03-25', 1, 33, 'C2', 'STANDARD', 35.0, TRUE, 'andrei99'),
+(9,  2, 'Gladiator',       'Raluca Vircan',    '2026-03-25', 1, 10, 'D1', 'STANDARD', 35.0, TRUE, 'raluca10'),
+(10, 1, 'The Dark Knight', 'Maria Ionescu',    '2026-03-25', 1, 3,  'E5', 'VIP',      55.0, TRUE, 'maria_m');
