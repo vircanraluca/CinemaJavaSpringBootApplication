@@ -78,16 +78,47 @@ INSERT INTO hall_showtimes (id, hall_number, movie, show_date, show_time) VALUES
 (45, 6, 'The Lion King',   '2026-03-26', '16:00'),
 (46, 6, 'The Lion King',   '2026-03-26', '18:00'),
 (47, 6, 'The Lion King',   '2026-03-26', '20:00'),
-(48, 6, 'The Lion King',   '2026-03-26', '22:00');
+(48, 6, 'The Lion King',   '2026-03-26', '22:00'),
+-- 31 martie
+(49, 1, 'The Dark Knight', '2026-03-31', '16:00'),
+(50, 1, 'The Dark Knight', '2026-03-31', '18:00'),
+(51, 1, 'The Dark Knight', '2026-03-31', '20:00'),
+(52, 1, 'The Dark Knight', '2026-03-31', '22:00'),
+(53, 2, 'Gladiator',       '2026-03-31', '16:00'),
+(54, 2, 'Gladiator',       '2026-03-31', '18:00'),
+(55, 2, 'Gladiator',       '2026-03-31', '20:00'),
+(56, 2, 'Gladiator',       '2026-03-31', '22:00'),
+(57, 3, 'The Matrix',      '2026-03-31', '16:00'),
+(58, 3, 'The Matrix',      '2026-03-31', '18:00'),
+(59, 3, 'The Matrix',      '2026-03-31', '20:00'),
+(60, 3, 'The Matrix',      '2026-03-31', '22:00'),
+(61, 4, 'The Godfather',   '2026-03-31', '16:00'),
+(62, 4, 'The Godfather',   '2026-03-31', '18:00'),
+(63, 4, 'The Godfather',   '2026-03-31', '20:00'),
+(64, 4, 'The Godfather',   '2026-03-31', '22:00'),
+(65, 5, 'Joker',           '2026-03-31', '16:00'),
+(66, 5, 'Joker',           '2026-03-31', '18:00'),
+(67, 5, 'Joker',           '2026-03-31', '20:00'),
+(68, 5, 'Joker',           '2026-03-31', '22:00'),
+(69, 6, 'The Shawshank Redemption', '2026-03-31', '16:00'),
+(70, 6, 'The Shawshank Redemption', '2026-03-31', '18:00'),
+(71, 6, 'The Shawshank Redemption', '2026-03-31', '20:00'),
+(72, 6, 'The Shawshank Redemption', '2026-03-31', '22:00');
 
 INSERT INTO reservations (id, hall_number, movie, name, reservation_date, seats, showtime_id, seat_label, ticket_type, price, paid, username) VALUES
-(1,  1, 'The Dark Knight', 'Raluca Vircan',    '2026-03-25', 1, 1,  'A1', 'STANDARD', 35.0, TRUE, 'raluca10'),
-(2,  1, 'The Dark Knight', 'Raluca Vircan',    '2026-03-25', 1, 1,  'B2', 'VIP',      55.0, TRUE, 'raluca10'),
-(3,  2, 'Gladiator',       'Andrei Pop',       '2026-03-25', 1, 9,  'A2', 'STANDARD', 35.0, TRUE, 'andrei99'),
-(4,  2, 'Gladiator',       'Maria Ionescu',    '2026-03-25', 1, 9,  'C3', 'VIP',      55.0, TRUE, 'maria_m'),
-(5,  1, 'The Dark Knight', 'Andrei Pop',       '2026-03-25', 1, 2,  'A4', 'STANDARD', 35.0, TRUE, 'andrei99'),
-(6,  3, 'The Matrix',      'Maria Ionescu',    '2026-03-25', 1, 17, 'B1', 'STANDARD', 35.0, TRUE, 'maria_m'),
-(7,  4, 'The Godfather',   'Raluca Vircan',    '2026-03-25', 1, 25, 'A3', 'VIP',      55.0, TRUE, 'raluca10'),
-(8,  5, 'Joker',           'Andrei Pop',       '2026-03-25', 1, 33, 'C2', 'STANDARD', 35.0, TRUE, 'andrei99'),
-(9,  2, 'Gladiator',       'Raluca Vircan',    '2026-03-25', 1, 10, 'D1', 'STANDARD', 35.0, TRUE, 'raluca10'),
-(10, 1, 'The Dark Knight', 'Maria Ionescu',    '2026-03-25', 1, 3,  'E5', 'VIP',      55.0, TRUE, 'maria_m');
+(1,  1, 'The Dark Knight', 'Raluca Vircan', '2026-03-31', 1, 49, 'A1', 'STANDARD', 35.0, TRUE, 'raluca10'),
+(2,  1, 'The Dark Knight', 'Raluca Vircan', '2026-03-31', 1, 49, 'B2', 'VIP',      55.0, TRUE, 'raluca10'),
+(3,  2, 'Gladiator',       'Andrei Pop',    '2026-03-31', 1, 53, 'A2', 'STANDARD', 35.0, TRUE, 'andrei99'),
+(4,  2, 'Gladiator',       'Maria Ionescu', '2026-03-31', 1, 53, 'C3', 'VIP',      55.0, TRUE, 'maria_m'),
+(5,  1, 'The Dark Knight', 'Andrei Pop',    '2026-03-31', 1, 50, 'A4', 'STANDARD', 35.0, TRUE, 'andrei99'),
+(6,  3, 'The Matrix',      'Maria Ionescu', '2026-03-31', 1, 57, 'B1', 'STANDARD', 35.0, TRUE, 'maria_m'),
+(7,  4, 'The Godfather',   'Raluca Vircan', '2026-03-31', 1, 61, 'A3', 'VIP',      55.0, TRUE, 'raluca10'),
+(8,  5, 'Joker',           'Andrei Pop',    '2026-03-31', 1, 65, 'C2', 'STANDARD', 35.0, TRUE, 'andrei99'),
+(9,  2, 'Gladiator',       'Raluca Vircan', '2026-03-31', 1, 54, 'D1', 'STANDARD', 35.0, TRUE, 'raluca10'),
+(10, 1, 'The Dark Knight', 'Maria Ionescu', '2026-03-31', 1, 51, 'E5', 'VIP',      55.0, TRUE, 'maria_m');
+
+
+ALTER TABLE reservations ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE hall_showtimes ALTER COLUMN id RESTART WITH 200;
+ALTER TABLE users ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE movies ALTER COLUMN id RESTART WITH 100;
